@@ -1,0 +1,7 @@
+@SuppressWarnings("unused")
+public class Answer {
+    int id;
+    String content;
+    Question question;
+    boolean isCorrect;
+}

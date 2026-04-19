@@ -1,5 +1,5 @@
 @SuppressWarnings("unused")
-public class Department {
+public class CategoryQuestion {
     int id;
     String name;
 }

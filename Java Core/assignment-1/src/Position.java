@@ -1,7 +1,7 @@
 public class Position {
     int id;
-    PositionName PositionName;
+    PositionName positionName;
     public enum PositionName {
-        DEV, TEST, SCRUM_MASTER, PM;
+        DEV, TEST, SCRUM_MASTER, PM
     }
 }
