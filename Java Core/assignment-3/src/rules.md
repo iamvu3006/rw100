@@ -21,3 +21,4 @@ trong đó sẽ có 5 hàm tương ứng với 5 câu hỏi của Exercise 1, m�
 Mỗi question sẽ có 1 hàm riêng, không nên gộp nhiều câu hỏi vào 1 hàm
  + Ví dụ Exercise 2, thì chúng ta sẽ tạo 1 class có tên là Exercise2, trong đó sẽ có 6 hàm tương ứng với 6 câu hỏi của Exercise 2,
 mỗi hàm sẽ trả về kết quả của câu hỏi đó. Sau đó chúng ta sẽ gọi hàm đó trong Program.java để in ra kết quả.
+4. Các câu lệnh print ra kết quả được viết bằng tiếng Việt có dấu, không được viết tắt, bám sát vào yêu cầu của Assignment (ví dụ: System.out.println("Câu 1: ...");).

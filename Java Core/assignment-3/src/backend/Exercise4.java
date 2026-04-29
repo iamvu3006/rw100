@@ -31,7 +31,7 @@ public class Exercise4 {
         String normalized = normalizeSpaces(name);
         String[] lines = new String[normalized.length()];
         for (int i = 0; i < normalized.length(); i++) {
-            lines[i] = "Character " + (i + 1) + " is: " + normalized.charAt(i);
+            lines[i] = "Ký tự thứ " + (i + 1) + " là: " + normalized.charAt(i);
         }
         return lines;
     }
@@ -243,4 +243,3 @@ public class Exercise4 {
         return builder.toString();
     }
 }
-

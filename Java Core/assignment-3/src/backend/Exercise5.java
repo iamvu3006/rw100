@@ -10,12 +10,12 @@ public class Exercise5 {
         Department[] departments = new Department[2];
         Department department1 = new Department();
         department1.id = 1;
-        department1.name = "Phong A";
+        department1.name = "Phòng A";
         departments[0] = department1;
 
         Department department2 = new Department();
         department2.id = 2;
-        department2.name = "Phong B";
+        department2.name = "Phòng B";
         departments[1] = department2;
 
         return departments;
@@ -88,4 +88,3 @@ public class Exercise5 {
         return sorted;
     }
 }
-
