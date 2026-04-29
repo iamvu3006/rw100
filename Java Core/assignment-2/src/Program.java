@@ -1,8 +1,11 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
@@ -11,6 +14,9 @@ public class Program {
         runExercise1(sampleData);
         runExercise2(sampleData);
         runExercise3(sampleData);
+        runExercise4(sampleData);
+        runExercise5(sampleData);
+        runExercise6(sampleData);
     }
 
     private static void runExercise1(SampleData sampleData) {
@@ -299,6 +305,97 @@ public class Program {
         System.out.println("Question 5:");
         SimpleDateFormat monthDay = new SimpleDateFormat("MM-dd");
         System.out.println(monthDay.format(exam.createDate));
+    }
+
+    private static void runExercise4(SampleData sampleData) {
+        System.out.println("===== Exercise 4: Random Number =====");
+
+        System.out.println("Question 1:");
+        int randomInt = Exercise4.question1RandomInt();
+        System.out.println(randomInt);
+
+        System.out.println("Question 2:");
+        double randomDouble = Exercise4.question2RandomDouble();
+        System.out.println(randomDouble);
+
+        System.out.println("Question 3:");
+        String[] classmateNames = {"An", "Binh", "Chi", "Dung", "Hanh"};
+        String randomName = Exercise4.question3RandomName(classmateNames);
+        System.out.println("Ten ban duoc chon: " + randomName);
+
+        System.out.println("Question 4:");
+        LocalDate randomDateRange = Exercise4.question4RandomDateInRange();
+        System.out.println(Exercise4.formatDate(randomDateRange));
+
+        System.out.println("Question 5:");
+        LocalDate randomDateLastYear = Exercise4.question5RandomDateLastYear();
+        System.out.println(Exercise4.formatDate(randomDateLastYear));
+
+        System.out.println("Question 6:");
+        LocalDate randomPastDate = Exercise4.question6RandomPastDate();
+        System.out.println(Exercise4.formatDate(randomPastDate));
+
+        System.out.println("Question 7:");
+        int randomThreeDigits = Exercise4.question7RandomThreeDigitNumber();
+        System.out.println(randomThreeDigits);
+    }
+
+    private static void runExercise5(SampleData sampleData) {
+        System.out.println("===== Exercise 5: Input from console =====");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Question 1:");
+        int[] integers = Exercise5.question1InputThreeIntegers(scanner);
+        System.out.println("Ban da nhap: " + Arrays.toString(integers));
+
+        System.out.println("Question 2:");
+        double[] doubles = Exercise5.question2InputTwoDoubles(scanner);
+        System.out.println("Ban da nhap: " + Arrays.toString(doubles));
+
+        System.out.println("Question 3:");
+        String fullName = Exercise5.question3InputFullName(scanner);
+        System.out.println("Ho va ten: " + fullName);
+
+        System.out.println("Question 4:");
+        LocalDate birthday = Exercise5.question4InputBirthday(scanner);
+        System.out.println("Ngay sinh: " + Exercise5.formatDate(birthday));
+
+        System.out.println("Question 5:");
+        Account newAccount = Exercise5.question5CreateAccount(scanner, sampleData.departments, sampleData.positions);
+        System.out.println("Thong tin account: " + Exercise5.formatAccount(newAccount));
+
+        System.out.println("Question 6:");
+        Department newDepartment = Exercise5.question6CreateDepartment(scanner);
+        System.out.println("Thong tin department: " + Exercise5.formatDepartment(newDepartment));
+
+        System.out.println("Question 7:");
+        int evenNumber = Exercise5.question7InputEvenNumber(scanner);
+        System.out.println("So chan vua nhap: " + evenNumber);
+
+        System.out.println("Question 8:");
+        Exercise5.question8CreateAccountOrDepartment(scanner, sampleData.departments, sampleData.positions);
+
+        System.out.println("Question 9:");
+        Exercise5.question9AddGroupToAccount(scanner, sampleData.accounts, sampleData.groups);
+
+        System.out.println("Question 10:");
+        Exercise5.question10MenuWithContinue(scanner, sampleData.accounts, sampleData.departments, sampleData.positions, sampleData.groups);
+
+        System.out.println("Question 11:");
+        Exercise5.question11AddAccountToRandomGroup(scanner, sampleData.accounts, sampleData.groups);
+    }
+
+    private static void runExercise6(SampleData sampleData) {
+        System.out.println("===== Exercise 6: Method =====");
+
+        System.out.println("Question 1:");
+        Exercise6.question1PrintEvenNumbersLessThan10();
+
+        System.out.println("Question 2:");
+        Exercise6.question2PrintAccounts(sampleData.accounts);
+
+        System.out.println("Question 3:");
+        Exercise6.question3PrintPositiveNumbersLessThan10();
     }
 
     private static void printGroupMessageIfElse(Account account) {

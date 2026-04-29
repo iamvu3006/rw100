@@ -7,6 +7,9 @@ Du an nay giai cac bai tap Assignment 2 theo huong in-memory (khong su dung co s
 - Exercise 1 (Flow Control): Q1 -> Q17
 - Exercise 2 (System.out.printf): Q1 -> Q6
 - Exercise 3 (Date Format): Q1 -> Q5
+- Exercise 4 (Random Number): Q1 -> Q7
+- Exercise 5 (Input from console): Q1 -> Q11
+- Exercise 6 (Method): Q1 -> Q3
 
 ## File chinh
 - `src/Program.java`: Tao du lieu mau va chay toan bo bai tap.
@@ -19,3 +22,4 @@ javac *.java
 java Main
 ```
 
+Luu y: Exercise 5 yeu cau nhap du lieu tu console, vi vay chuong trinh se cho ban nhap lan luot theo tung cau hoi.
