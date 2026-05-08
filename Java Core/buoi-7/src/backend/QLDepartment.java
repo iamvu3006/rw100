@@ -1,0 +1,73 @@
+package backend;
+
+import entity.Department;
+
+import java.sql.*;
+import java.util.*;
+
+public class QLDepartment {
+    public static void showDepartment() throws ClassNotFoundException, SQLException {
+        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
+        String username = "root";
+        String password = "root";// mk mysql
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Kết nối với database thành công!");
+
+            String sql = "SELECT * FROM department";
+            try (Statement statement = connection.createStatement();
+                 ResultSet rs = statement.executeQuery(sql)) {
+                List<Department> departments = new ArrayList<>();
+
+                while (rs.next()) {
+                    int id = rs.getInt("department_id");
+                    String name = rs.getString("department_name");
+                    Department department = new Department(id, name);
+                    departments.add(department);
+                }
+
+                for (Department department : departments) {
+                    System.out.println("ID: " + department.getId() + ", Name: " + department.getName());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Kết nối với database không thành công");
+        }
+    }
+
+    //tìm các phòng ban có chữ xyz chưa biết trước
+    public static void findByNameAndId(String searchName, int searchId) throws ClassNotFoundException, SQLException {
+        //bước 1: kết nối database
+        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
+        String username = "root";
+        String password = "root";// mk mysql
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Kết nối với database thành công!");
+
+            //bước 2: tìm các phòng ban có tên là name
+            String sql = "SELECT * FROM department WHERE department_name LIKE ? and department_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement.setString(1, searchName); //truyền giá trị searchName vào dấu ? thứ 1
+            statement.setInt(2, searchId); //truyền giá trị 2 vào dấu ? thứ 2
+
+            ResultSet rs = statement.executeQuery();
+
+            List<Department> departments = new ArrayList<>(); //lưu lại giá trị lấy từ database
+
+            while (rs.next()) { //lặp qua từng dòng của rs
+                int id = rs.getInt("department_id"); //lấy giá trị của cột department_id
+                String deptName = rs.getString("department_name"); //lấy giá trị của cột department_name
+                Department department = new Department(id, deptName);
+                departments.add(department);
+            }
+
+            for (Department department : departments) {
+                System.out.println("ID: " + department.getId() + ", Name: " + department.getName());
+            }
+        } catch (Exception e) {
+            System.out.println("Kết nối với database không thành công");
+        }
+    }
+}
