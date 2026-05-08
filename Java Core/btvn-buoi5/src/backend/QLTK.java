@@ -173,7 +173,7 @@ public class QLTK {
         System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", "ID", "FullName", "Email", "Username", "Tên phòng ban", "Tên chức vụ");
         System.out.println("+-----+--------------------+--------------------+--------------------+--------------------+--------------------+");
         for (Account account : accounts) {
-            System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getId(), account.getPosition().getName().name());
+            System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getName(), account.getPosition().getName().name());
         }
         System.out.println("+-----+--------------------+--------------------+--------------------+--------------------+--------------------+");
     }
@@ -207,7 +207,7 @@ public class QLTK {
         System.out.println("+-----+--------------------+--------------------+--------------------+--------------------+--------------------+");
         for (Account account : accounts) {
             if (depName.equalsIgnoreCase(account.getDepartment().getName())) {
-                System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getId(), account.getPosition().getName().name());
+                System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getName(), account.getPosition().getName().name());
                 checkDepartmentNameExists = true;
             }
         }
@@ -227,7 +227,7 @@ public class QLTK {
         System.out.println("+-----+--------------------+--------------------+--------------------+--------------------+--------------------+");
         for (Account account : accounts) {
             if (poName.equalsIgnoreCase(account.getPosition().getName().name())) {
-                System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getId(), account.getPosition().getName().name());
+                System.out.printf("|%5s|%20s|%20s|%20s|%20s|%20s|\n", account.getId(), account.getFullName(), account.getEmail(), account.getUsername(), account.getDepartment().getName(), account.getPosition().getName().name());
                 checkPositionNameExists = true;
             }
         }
