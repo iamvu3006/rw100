@@ -1,3 +1,5 @@
+package frontend;
+
 import backend.QLTK;
 
 public class Main {
