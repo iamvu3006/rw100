@@ -20,5 +20,7 @@ public class Main {
 
         //QLAccount
         QLAccount.showAllAccount();
+        QLAccount.findByFullname("Nguyen Van A");
+        QLAccount.findByFullnameAndUsername("Nguyen Van An", "annguyen");
     }
 }
