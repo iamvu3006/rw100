@@ -145,10 +145,36 @@ public class QLDepartment {
         try {
             //bước 1: kết nối database
             Connection connection = JDBCUtils.getConnection();
-            //bước 2: xóa phòng ban mới
+            //bước 2: xóa phòng ban
             String sql = "DELETE FROM department WHERE  department_name LIKE ?";
             PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
             statement.setString(1, deleteName); //truyền giá trị name vào dấu ? thứ 1
+            //thực thi câu lệnh sql
+            int c = statement.executeUpdate();
+//            if (c > 0) {
+//                return true;
+//            }
+//            else {
+//                return false;
+//            }
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updateDepartment(int id, String updateName) {
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
+            //bước 2: update phòng ban
+            String sql = "update department set department_name = ? where department_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
+            statement.setString(1, updateName); //truyền giá trị name vào dấu ? thứ 1
+            statement.setInt(2, id); //truyền giá trị 1 vào dấu ? thứ 2
             //thực thi câu lệnh sql
             int c = statement.executeUpdate();
 //            if (c > 0) {

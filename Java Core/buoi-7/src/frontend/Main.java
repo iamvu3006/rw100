@@ -24,7 +24,8 @@ public class Main {
 //        QLAccount.findByFullnameAndUsername("Nguyen Van An", "annguyen");
 
         //insertDepartment();
-        deleteDepartment();
+        //deleteDepartment();
+        updateDepartment();
     }
     public static void insertDepartment () {
         Scanner scanner = new Scanner(System.in);
@@ -47,6 +48,22 @@ public class Main {
             System.out.println("Xóa phòng ban thành công");
         } else {
             System.out.println("Xóa phòng ban thất bại");
+        }
+    }
+
+    public static void updateDepartment () {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Nhập ID phòng ban cần update:");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Đọc bỏ dòng mới sau khi đọc số nguyên
+
+        System.out.println("Nhập tên phòng ban sau khi update:");
+        String name = scanner.nextLine();
+        boolean check = QLDepartment.updateDepartment(id, name);
+        if (check) {
+            System.out.println("Update phòng ban thành công");
+        } else {
+            System.out.println("Update phòng ban thất bại");
         }
     }
 }
