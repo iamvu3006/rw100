@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QLPosition {
-    public static void showAllPosition() throws ClassNotFoundException {
-        try {
+    public static List<Position> showAllPosition() {
+        try (Connection connection = JDBCUtils.getConnection()) {
             //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
-
             //bước 2: lấy tất cả position
             String sql = "SELECT * FROM position";
             try (Statement statement = connection.createStatement();
@@ -27,19 +25,18 @@ public class QLPosition {
                     positions.add(position);
                 }
 
-                for (Position position : positions) {
-                    System.out.println("ID: " + position.getId() + ", Name: " + position.getName());
-                }
+                showPosition(positions);
+                return positions;
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
-    public static void findByPositionName(String searchPositionName) throws ClassNotFoundException, SQLException {
-        try {
+    public static List<Position> findByPositionName(String searchPositionName) {
+        try (Connection connection = JDBCUtils.getConnection()) {
             //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: tìm position theo tên
             String sql = "SELECT * FROM position WHERE position_name LIKE ?";
@@ -56,14 +53,24 @@ public class QLPosition {
                         positions.add(position);
                     }
 
-                    for (Position position : positions) {
-                        System.out.println("ID: " + position.getId() + ", Name: " + position.getName());
-                    }
+                    showPosition(positions);
+                    return positions;
                 }
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
+    }
+
+    private static void showPosition(List<Position> positions) {
+        System.out.println("+--------------+--------------------+");
+        System.out.printf("| %-12s | %-18s |%n", "ID", "Position Name");
+        System.out.println("+--------------+--------------------+");
+        for (Position position : positions) {
+            System.out.printf("| %-12d | %-18s |%n", position.getId(), position.getName());
+        }
+        System.out.println("+--------------+--------------------+");
     }
 
 }

@@ -7,10 +7,9 @@ import java.sql.*;
 import java.util.*;
 
 public class QLDepartment {
-    public static void showDepartment() throws ClassNotFoundException, SQLException {
-        try {
+    public static List<Department> showDepartment() {
+        try (Connection connection = JDBCUtils.getConnection()) {
             //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
             String sql = "SELECT * FROM department";
             try (Statement statement = connection.createStatement(); //tạo đối tượng statement để thực hiện truy vấn SQL
                  ResultSet rs = statement.executeQuery(sql)) {
@@ -19,24 +18,22 @@ public class QLDepartment {
                 while (rs.next()) {
                     int id = rs.getInt("department_id"); //lấy dữ liệu cột department_id
                     String name = rs.getString("department_name"); //lấy ữ liệu cột department_name
-                    Department department = new Department(id, name);
-                    departments.add(department);
+                    departments.add(new Department(id, name));
                 }
 
-                for (Department department : departments) {
-                    System.out.println("ID: " + department.getId() + ", Name: " + department.getName());
-                }
+                showDepartment(departments);
+                return departments;
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
     //tìm các phòng ban có chữ xyz chưa biết trước
-    public static void findByNameAndId(String searchName, int searchId) throws ClassNotFoundException, SQLException {
-        try {
+    public static List<Department> findByNameAndId(String searchName, int searchId) {
+        try (Connection connection = JDBCUtils.getConnection()) {
             //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
             //bước 2: tìm các phòng ban có tên là name
             String sql = "SELECT * FROM department WHERE department_name LIKE ? and department_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
@@ -51,42 +48,70 @@ public class QLDepartment {
             while (rs.next()) { //lặp qua từng dòng của rs
                 int id = rs.getInt("department_id"); //lấy giá trị của cột department_id
                 String deptName = rs.getString("department_name"); //lấy giá trị của cột department_name
-                Department department = new Department(id, deptName);
-                departments.add(department);
+                departments.add(new Department(id, deptName));
             }
 
-            for (Department department : departments) {
-                System.out.println("ID: " + department.getId() + ", Name: " + department.getName());
-            }
+            showDepartment(departments);
+            return departments;
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
     // in ra các phòng ban có >=2 nhân viên
-    public static void showDepartmentHasAtLeast2Employees() throws ClassNotFoundException, SQLException {
-        try {
+    public static List<Department> showDepartmentHasAtLeast2Employees() {
+        try (Connection connection = JDBCUtils.getConnection()) {
             //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
             //bước 2: lấy các phòng ban có từ 2 nhân viên trở lên
             String sql =
                     "SELECT d.department_id, d.department_name, COUNT(a.account_id) AS total_member " +
                     "FROM department d " +
                     "JOIN `account` a ON d.department_id = a.department_id " +
-                    "GROUP BY d.department_id " +
+                    "GROUP BY d.department_id, d.department_name " +
                     "HAVING COUNT(a.account_id) >= 2";
 
             try (Statement statement = connection.createStatement();
                  ResultSet rs = statement.executeQuery(sql)) {
+                List<Department> departments = new ArrayList<>();
+                List<Integer> totalMembers = new ArrayList<>();
+
                 while (rs.next()) {
                     int id = rs.getInt("department_id"); //lấy giá trị của cột department_id
                     String name = rs.getString("department_name"); //lấy giá trị của cột department_name
                     int totalMember = rs.getInt("total_member"); //lấy giá trị của cột total_member (số lượng nhân viên trong phòng ban)
-                    System.out.println("ID: " + id + ", Name: " + name + ", Total Member: " + totalMember);
+                    departments.add(new Department(id, name));
+                    totalMembers.add(totalMember);
                 }
+
+                showDepartmentWithTotalMember(departments, totalMembers);
+                return departments;
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
+    }
+
+    private static void showDepartment(List<Department> departments) {
+        System.out.println("+--------------+------------------------------+");
+        System.out.printf("| %-12s | %-28s |%n", "ID", "Department Name");
+        System.out.println("+--------------+------------------------------+");
+        for (Department department : departments) {
+            System.out.printf("| %-12d | %-28s |%n", department.getId(), department.getName());
+        }
+        System.out.println("+--------------+------------------------------+");
+    }
+
+    private static void showDepartmentWithTotalMember(List<Department> departments, List<Integer> totalMembers) {
+        System.out.println("+--------------+------------------------------+--------------+");
+        System.out.printf("| %-12s | %-28s | %-12s |%n", "ID", "Department Name", "TotalMember");
+        System.out.println("+--------------+------------------------------+--------------+");
+        for (int i = 0; i < departments.size(); i++) {
+            Department department = departments.get(i);
+            Integer totalMember = totalMembers.get(i);
+            System.out.printf("| %-12d | %-28s | %-12d |%n", department.getId(), department.getName(), totalMember);
+        }
+        System.out.println("+--------------+------------------------------+--------------+");
     }
 }

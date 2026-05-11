@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QLAccount {
-    public static void showAllAccount() throws ClassNotFoundException, SQLException {
+    public static List<Account> showAllAccount() throws ClassNotFoundException, SQLException {
         try {
             //bước 1: kết nối database
             Connection connection = JDBCUtils.getConnection();
@@ -45,21 +45,16 @@ public class QLAccount {
                     accounts.add(account);
                 }
 
-                for (Account account : accounts) {
-                    System.out.println("ID: " + account.getId()
-                            + ", FullName: " + account.getFullName()
-                            + ", Email: " + account.getEmail()
-                            + ", Username: " + account.getUsername()
-                            + ", Department: " + account.getDepartment().getName()
-                            + ", Position: " + account.getPosition().getName());
-                }
+                showAccount(accounts);
+                return accounts;
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
-    public static void findByFullname(String searchFullname) throws ClassNotFoundException, SQLException {
+    public static List<Account> findByFullname(String searchFullname) throws ClassNotFoundException, SQLException {
         try {
             //bước 1: kết nối database
             Connection connection = JDBCUtils.getConnection();
@@ -96,25 +91,24 @@ public class QLAccount {
                         accounts.add(account);
                     }
 
-                    for (Account account : accounts) {
-                        System.out.println("ID: " + account.getId()
-                                + ", FullName: " + account.getFullName()
-                                + ", Email: " + account.getEmail()
-                                + ", Username: " + account.getUsername()
-                                + ", Department: " + account.getDepartment().getName()
-                                + ", Position: " + account.getPosition().getName());
-                    }
+                    showAccount(accounts);
+                    return accounts;
                 }
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
-    public static void findByFullnameAndUsername(String searchFullname, String searchUsername) throws ClassNotFoundException, SQLException {
-        try {
-            //bước 1: kết nối database
-            Connection connection = JDBCUtils.getConnection();
+    public static List<Account> findByFullnameAndUsername(String searchFullname, String searchUsername) throws ClassNotFoundException, SQLException {
+        //bước 1: kết nối database
+        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
+        String username = "root";
+        String password = "";// mk mysql
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            System.out.println("Kết nối với database thành công!");
 
             //bước 2: tìm account theo fullname và username
             String sql = "SELECT a.account_id, a.email, a.username, a.full_name, " +
@@ -149,19 +143,31 @@ public class QLAccount {
                         accounts.add(account);
                     }
 
-                    for (Account account : accounts) {
-                        System.out.println("ID: " + account.getId()
-                                + ", FullName: " + account.getFullName()
-                                + ", Email: " + account.getEmail()
-                                + ", Username: " + account.getUsername()
-                                + ", Department: " + account.getDepartment().getName()
-                                + ", Position: " + account.getPosition().getName());
-                    }
+                    showAccount(accounts);
+                    return accounts;
                 }
             }
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
+            return new ArrayList<>();
         }
+    }
+
+    private static void showAccount(List<Account> accounts) {
+        System.out.println("+----------+-------------------------+------------------------------+--------------------+------------------------------+--------------------+");
+        System.out.printf("| %-8s | %-23s | %-28s | %-18s | %-28s | %-18s |%n",
+                "ID", "FullName", "Email", "Username", "Department", "Position");
+        System.out.println("+----------+-------------------------+------------------------------+--------------------+------------------------------+--------------------+");
+        for (Account account : accounts) {
+            System.out.printf("| %-8d | %-23s | %-28s | %-18s | %-28s | %-18s |%n",
+                    account.getId(),
+                    account.getFullName(),
+                    account.getEmail(),
+                    account.getUsername(),
+                    account.getDepartment().getName(),
+                    account.getPosition().getName());
+        }
+        System.out.println("+----------+-------------------------+------------------------------+--------------------+------------------------------+--------------------+");
     }
 }
 
