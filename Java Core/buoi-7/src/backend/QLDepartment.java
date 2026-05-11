@@ -1,19 +1,16 @@
 package backend;
 
 import entity.Department;
+import utils.JDBCUtils;
 
 import java.sql.*;
 import java.util.*;
 
 public class QLDepartment {
     public static void showDepartment() throws ClassNotFoundException, SQLException {
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
-
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
             String sql = "SELECT * FROM department";
             try (Statement statement = connection.createStatement(); //tạo đối tượng statement để thực hiện truy vấn SQL
                  ResultSet rs = statement.executeQuery(sql)) {
@@ -37,14 +34,9 @@ public class QLDepartment {
 
     //tìm các phòng ban có chữ xyz chưa biết trước
     public static void findByNameAndId(String searchName, int searchId) throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
-
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
             //bước 2: tìm các phòng ban có tên là name
             String sql = "SELECT * FROM department WHERE department_name LIKE ? and department_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
@@ -73,14 +65,9 @@ public class QLDepartment {
 
     // in ra các phòng ban có >=2 nhân viên
     public static void showDepartmentHasAtLeast2Employees() throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
-
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
             //bước 2: lấy các phòng ban có từ 2 nhân viên trở lên
             String sql =
                     "SELECT d.department_id, d.department_name, COUNT(a.account_id) AS total_member " +

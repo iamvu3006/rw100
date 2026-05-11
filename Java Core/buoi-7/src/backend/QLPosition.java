@@ -2,6 +2,7 @@ package backend;
 
 import entity.Position;
 import enums.PositionName;
+import utils.JDBCUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,13 +10,9 @@ import java.util.List;
 
 public class QLPosition {
     public static void showAllPosition() throws ClassNotFoundException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: lấy tất cả position
             String sql = "SELECT * FROM position";
@@ -40,13 +37,9 @@ public class QLPosition {
     }
 
     public static void findByPositionName(String searchPositionName) throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: tìm position theo tên
             String sql = "SELECT * FROM position WHERE position_name LIKE ?";

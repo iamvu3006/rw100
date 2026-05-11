@@ -4,6 +4,7 @@ import entity.Account;
 import entity.Department;
 import entity.Position;
 import enums.PositionName;
+import utils.JDBCUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,13 +12,9 @@ import java.util.List;
 
 public class QLAccount {
     public static void showAllAccount() throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: lấy tất cả account
             String sql = "SELECT a.account_id, a.email, a.username, a.full_name, " +
@@ -63,13 +60,9 @@ public class QLAccount {
     }
 
     public static void findByFullname(String searchFullname) throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: tìm account theo fullname
             String sql = "SELECT a.account_id, a.email, a.username, a.full_name, " +
@@ -119,13 +112,9 @@ public class QLAccount {
     }
 
     public static void findByFullnameAndUsername(String searchFullname, String searchUsername) throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: tìm account theo fullname và username
             String sql = "SELECT a.account_id, a.email, a.username, a.full_name, " +
