@@ -102,13 +102,8 @@ public class QLAccount {
     }
 
     public static List<Account> findByFullnameAndUsername(String searchFullname, String searchUsername) throws ClassNotFoundException, SQLException {
-        //bước 1: kết nối database
-        String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
-        String username = "root";
-        String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            System.out.println("Kết nối với database thành công!");
+        try {
+            Connection connection = JDBCUtils.getConnection();
 
             //bước 2: tìm account theo fullname và username
             String sql = "SELECT a.account_id, a.email, a.username, a.full_name, " +

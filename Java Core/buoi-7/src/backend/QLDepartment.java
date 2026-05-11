@@ -66,10 +66,10 @@ public class QLDepartment {
             //bước 2: lấy các phòng ban có từ 2 nhân viên trở lên
             String sql =
                     "SELECT d.department_id, d.department_name, COUNT(a.account_id) AS total_member " +
-                    "FROM department d " +
-                    "JOIN `account` a ON d.department_id = a.department_id " +
-                    "GROUP BY d.department_id, d.department_name " +
-                    "HAVING COUNT(a.account_id) >= 2";
+                            "FROM department d " +
+                            "JOIN `account` a ON d.department_id = a.department_id " +
+                            "GROUP BY d.department_id, d.department_name " +
+                            "HAVING COUNT(a.account_id) >= 2";
 
             try (Statement statement = connection.createStatement();
                  ResultSet rs = statement.executeQuery(sql)) {
@@ -113,5 +113,56 @@ public class QLDepartment {
             System.out.printf("| %-12d | %-28s | %-12d |%n", department.getId(), department.getName(), totalMember);
         }
         System.out.println("+--------------+------------------------------+--------------+");
+    }
+
+    public static boolean createDepartment(String name) {
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
+            //bước 2: tạo phòng ban mới
+            String sql = "INSERT INTO department (department_name) VALUES (?)";
+            PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
+            statement.setString(1, name); //truyền giá trị name vào dấu ? thứ 1
+            //thực thi câu lệnh sql
+            int c = statement.executeUpdate();
+//            if (c > 0) {
+//                return true;
+//            }
+//            else {
+//                return false;
+//            }
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //nhập vào tên phòng ban và xóa phòng ban đó đi
+    public static boolean deleteDepartment(String deleteName) {
+        try {
+            //bước 1: kết nối database
+            Connection connection = JDBCUtils.getConnection();
+            //bước 2: xóa phòng ban mới
+            String sql = "DELETE FROM department WHERE  department_name LIKE ?";
+            PreparedStatement statement = connection.prepareStatement(sql); //thực hiện truy vấn SQL với tham số
+            statement.setString(1, deleteName); //truyền giá trị name vào dấu ? thứ 1
+            //thực thi câu lệnh sql
+            int c = statement.executeUpdate();
+//            if (c > 0) {
+//                return true;
+//            }
+//            else {
+//                return false;
+//            }
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
