@@ -164,5 +164,59 @@ public class QLAccount {
         }
         System.out.println("+----------+-------------------------+------------------------------+--------------------+------------------------------+--------------------+");
     }
+
+    public static boolean createAccount(String username, String fullName, String email, int departmentId, int positionId) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "INSERT INTO `account` (username, full_name, email, department_id, position_id, create_date) VALUES (?, ?, ?, ?, ?, now())";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, fullName);
+            statement.setString(3, email);
+            statement.setInt(4, departmentId);
+            statement.setInt(5, positionId);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updateAccount(int id, String username, String fullName, String email, int departmentId, int positionId) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "UPDATE `account` SET username = ?, full_name = ?, email = ?, department_id = ?, position_id = ? WHERE account_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, fullName);
+            statement.setString(3, email);
+            statement.setInt(4, departmentId);
+            statement.setInt(5, positionId);
+            statement.setInt(6, id);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteAccount(String username) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "DELETE FROM `account` WHERE username LIKE ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 

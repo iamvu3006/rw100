@@ -73,4 +73,50 @@ public class QLPosition {
         System.out.println("+--------------+--------------------+");
     }
 
+    public static boolean createPosition(String name) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "INSERT INTO position (position_name) VALUES (?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, name);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updatePosition(int id, String updateName) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "UPDATE position SET position_name = ? WHERE position_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, updateName);
+            statement.setInt(2, id);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deletePosition(String deleteName) {
+        try {
+            Connection connection = JDBCUtils.getConnection();
+            String sql = "DELETE FROM position WHERE position_name LIKE ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, deleteName);
+            int c = statement.executeUpdate();
+            JDBCUtils.closeConnection(connection, statement, null);
+            return c > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
