@@ -30,6 +30,29 @@ public class QLDepartment {
         }
     }
 
+    // lấy ds các phòng ban trong DB và in ra
+    public static List<Department> findAllDepartment() throws ClassNotFoundException {
+        List<Department> departments = new ArrayList<>();// lưu lại dữ liệu lấy từ DB
+        try {
+            // b1: kết nối đến DB
+            Connection connection = JDBCUtils.getConnection();
+            // b2: lấy dữ liệu từ bảng department
+            String sql = "select * from department;";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
+            while (rs.next()) {// lặp qua qua từng dòng của rs
+                int id = rs.getInt("department_id");// lấy giá trị từ cloumn department_id
+                String name = rs.getString("department_name");//lấy giá trị từ cloumn department_name
+                Department dep = new Department(id, name);
+                departments.add(dep);
+            }
+            JDBCUtils.closeConnection(connection, statement, rs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return departments;
+    }
+
     //tìm các phòng ban có chữ xyz chưa biết trước
     public static List<Department> findByNameAndId(String searchName, int searchId) {
         try (Connection connection = JDBCUtils.getConnection()) {
