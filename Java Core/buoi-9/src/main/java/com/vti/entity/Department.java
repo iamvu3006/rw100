@@ -1,5 +1,7 @@
 package com.vti.entity;
 
+import java.util.Objects;
+
 public class Department {
     private int id;
     private String name;

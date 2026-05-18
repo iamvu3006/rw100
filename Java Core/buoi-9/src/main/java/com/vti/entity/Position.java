@@ -1,5 +1,6 @@
 package com.vti.entity;
 
+
 import com.vti.enums.PositionName;
 
 public class Position {

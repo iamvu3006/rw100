@@ -7,22 +7,26 @@ import com.vti.entity.Department;
 import java.util.List;
 
 public class DepartmentController {
-    //khởi tạo service
-    private IDepartmentService departmentService = new DepartmentServiceImpl();
+    // khởi tạo service
+    IDepartmentService departmentService = new DepartmentServiceImpl();
 
-    public List<Department> findAllDepartment() throws ClassNotFoundException {
-        return departmentService.findAll();
+    public List<Department> findAll() {
+        return departmentService.findAll();// lấy ds từ service
     }
 
-    public boolean insertDepartment(Department department) throws ClassNotFoundException {
-        return departmentService.insert(department);
+    public boolean create(String name) {
+        return departmentService.create(name);
     }
 
-    public boolean updateDepartment(Department department) throws ClassNotFoundException {
-        return departmentService.update(department);
+    public boolean update(int id, String name) {
+        return departmentService.update(id, name);
     }
 
-    public boolean deleteDepartment(int id) throws ClassNotFoundException {
+    public boolean delete(int id) {
         return departmentService.delete(id);
+    }
+
+    public boolean checkExistName(String name, Integer id) {
+        return departmentService.checkExistName(name, id);
     }
 }
