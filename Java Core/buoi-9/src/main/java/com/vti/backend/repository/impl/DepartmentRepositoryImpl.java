@@ -82,4 +82,53 @@ public class DepartmentRepositoryImpl implements IDepartmentRepository {
             return false;
         }
     }
+
+    @Override
+    public int countByName(String name) throws ClassNotFoundException {
+        return countByName(name, null);
+    }
+
+    @Override
+    public int countByName(String name, Integer excludeId) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM department WHERE LOWER(TRIM(department_name)) = LOWER(TRIM(?))";
+        if (excludeId != null) {
+            sql += " AND department_id <> ?";
+        }
+
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, name);
+            if (excludeId != null) {
+                statement.setInt(2, excludeId);
+            }
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi kiểm tra phòng ban: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int countById(int id) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM department WHERE department_id = ?";
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi kiểm tra id phòng ban: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

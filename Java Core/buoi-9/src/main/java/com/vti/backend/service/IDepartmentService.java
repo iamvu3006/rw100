@@ -7,4 +7,5 @@ public interface IDepartmentService {
     boolean insert(Department department) throws ClassNotFoundException;
     boolean update(Department department) throws ClassNotFoundException;
     boolean delete(int id) throws ClassNotFoundException;
+    boolean checkExistName(String name, Integer id) throws ClassNotFoundException;
 }

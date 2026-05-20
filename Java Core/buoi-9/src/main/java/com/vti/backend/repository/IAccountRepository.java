@@ -15,4 +15,18 @@ public interface IAccountRepository {
     boolean delete(int id);
 
     Map<String, Account> mapAccountByUsername();
+
+    int countByUsername(String username) throws ClassNotFoundException;
+
+    int countByUsername(String username, Integer excludeId) throws ClassNotFoundException;
+
+    int countByEmail(String email) throws ClassNotFoundException;
+
+    int countByEmail(String email, Integer excludeId) throws ClassNotFoundException;
+
+    int countById(int id) throws ClassNotFoundException;
+
+    int countDepartmentById(int departmentId) throws ClassNotFoundException;
+
+    int countPositionById(int positionId) throws ClassNotFoundException;
 }

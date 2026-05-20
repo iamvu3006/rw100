@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Menu {
     private Scanner sc = new Scanner(System.in);
 
-    public void run() {
+    public void run() throws ClassNotFoundException {
         while (true) {
             System.out.println("=== Mời bạn chọn chức năng ===");
             System.out.println("1. Làm việc với department");
@@ -16,12 +16,15 @@ public class Menu {
                 case "1":
                     DepartmentFunction departmentFunction = new DepartmentFunction();
                     departmentFunction.run();
+                    break;
                 case "2":
                     PositionFunction positionFunction = new PositionFunction();
                     positionFunction.run();
+                    break;
                 case "3":
                     AccountFunction accountFunction = new AccountFunction();
                     accountFunction.run();
+                    break;
                 default:
                     System.out.println("Mời chọn lại");
             }

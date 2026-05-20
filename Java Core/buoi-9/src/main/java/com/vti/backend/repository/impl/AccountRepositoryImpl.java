@@ -157,4 +157,78 @@ public class AccountRepositoryImpl implements IAccountRepository {
         }
         return mapAccountByUsername;
     }
+
+    @Override
+    public int countByUsername(String username) throws ClassNotFoundException {
+        return countByUsername(username, null);
+    }
+
+    @Override
+    public int countByUsername(String username, Integer excludeId) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM account WHERE LOWER(TRIM(username)) = LOWER(TRIM(?))";
+        if (excludeId != null) {
+            sql += " AND account_id <> ?";
+        }
+        return executeCount(sql, username, excludeId);
+    }
+
+    @Override
+    public int countByEmail(String email) throws ClassNotFoundException {
+        return countByEmail(email, null);
+    }
+
+    @Override
+    public int countByEmail(String email, Integer excludeId) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM account WHERE LOWER(TRIM(email)) = LOWER(TRIM(?))";
+        if (excludeId != null) {
+            sql += " AND account_id <> ?";
+        }
+        return executeCount(sql, email, excludeId);
+    }
+
+    @Override
+    public int countById(int id) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM account WHERE account_id = ?";
+        return executeCount(sql, id);
+    }
+
+    @Override
+    public int countDepartmentById(int departmentId) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM department WHERE department_id = ?";
+        return executeCount(sql, departmentId);
+    }
+
+    @Override
+    public int countPositionById(int positionId) throws ClassNotFoundException {
+        String sql = "SELECT COUNT(1) FROM position WHERE position_id = ?";
+        return executeCount(sql, positionId);
+    }
+
+    private int executeCount(String sql, Object firstParam) throws ClassNotFoundException {
+        return executeCount(sql, firstParam, null);
+    }
+
+    private int executeCount(String sql, Object firstParam, Integer secondParam) throws ClassNotFoundException {
+        try (Connection connection = JDBCUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            if (firstParam instanceof String) {
+                preparedStatement.setString(1, (String) firstParam);
+            } else if (firstParam instanceof Integer) {
+                preparedStatement.setInt(1, (Integer) firstParam);
+            }
+            if (secondParam != null) {
+                preparedStatement.setInt(2, secondParam);
+            }
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Lỗi khi kiểm tra account: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

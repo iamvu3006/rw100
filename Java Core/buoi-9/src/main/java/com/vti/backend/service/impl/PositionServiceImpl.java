@@ -19,16 +19,63 @@ public class PositionServiceImpl implements IPositionService {
 
     @Override
     public boolean create(PositionName name) {
-        return positionRepository.create(name);
+        try {
+            if (name == null) {
+                System.out.println("Tên position không được để trống");
+                return false;
+            }
+            if (positionRepository.countByName(name) > 0) {
+                System.out.println("Tên position đã tồn tại");
+                return false;
+            }
+            return positionRepository.create(name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean update(int id, PositionName name) {
-        return positionRepository.update(id, name);
+        try {
+            if (id <= 0) {
+                System.out.println("ID position không hợp lệ");
+                return false;
+            }
+            if (positionRepository.countById(id) == 0) {
+                System.out.println("ID position không tồn tại");
+                return false;
+            }
+            if (name == null) {
+                System.out.println("Tên position không được để trống");
+                return false;
+            }
+            if (positionRepository.countByName(name, id) > 0) {
+                System.out.println("Tên position đã tồn tại");
+                return false;
+            }
+            return positionRepository.update(id, name);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean delete(int id) {
-        return positionRepository.delete(id);
+        try {
+            if (id <= 0) {
+                System.out.println("ID position không hợp lệ");
+                return false;
+            }
+            if (positionRepository.countById(id) == 0) {
+                System.out.println("ID position không tồn tại");
+                return false;
+            }
+            return positionRepository.delete(id);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

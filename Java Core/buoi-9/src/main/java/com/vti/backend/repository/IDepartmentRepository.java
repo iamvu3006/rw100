@@ -9,4 +9,7 @@ public interface IDepartmentRepository {
     boolean insert(Department department) throws ClassNotFoundException;
     boolean update(Department department) throws ClassNotFoundException;
     boolean delete(int id) throws ClassNotFoundException;
+    int countByName(String name) throws ClassNotFoundException;
+    int countByName(String name, Integer excludeId) throws ClassNotFoundException;
+    int countById(int id) throws ClassNotFoundException;
 }
