@@ -10,14 +10,14 @@ import com.vti.entity.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+import com.vti.utils.ScannerUtils;
 
 public class AccountFunction {
     // khoi tao accountController
     private AccountController accountController = new AccountController();
     private DepartmentController departmentController = new DepartmentController();
     private PositionController positionController = new PositionController();
-    private static Scanner sc = new Scanner(System.in);
+    // use ScannerUtils for input validation
 
     public void run() {
         List<Account> accounts = new ArrayList<>();
@@ -29,7 +29,7 @@ public class AccountFunction {
             System.out.println("4. Update account theo ID");
             System.out.println("5. Map account by username");
             System.out.println("6. Thoát");
-            String choice = sc.nextLine();
+            String choice = ScannerUtils.inputString();
             switch (choice) {
                 case "1":
                     accounts = accountController.findAll();
@@ -72,11 +72,11 @@ public class AccountFunction {
 
     public void insertAccount() {
         System.out.println("Nhập email: ");
-        String email = sc.nextLine();
+        String email = ScannerUtils.inputString();
         System.out.println("Nhập username: ");
-        String username = sc.nextLine();
+        String username = ScannerUtils.inputString();
         System.out.println("Nhập fullName: ");
-        String fullName = sc.nextLine();
+        String fullName = ScannerUtils.inputString();
         System.out.println("Chọn ID department: ");
         List<Department> departments = departmentController.findAll();
         String depID;
@@ -84,7 +84,7 @@ public class AccountFunction {
             for (Department department : departments) {
                 System.out.println("ID: " + department.getId() + ", DepartmentName: " + department.getName());
             }
-            depID = sc.nextLine();
+            depID = ScannerUtils.inputString();
             boolean checkExists = checkExistDepartment(departments, depID);
             if (!checkExists) {
                 System.out.println("Chọn sai, chọn lại!");
@@ -100,7 +100,7 @@ public class AccountFunction {
             for (Position position : positions) {
                 System.out.println("ID: " + position.getId() + ", PositionName: " + position.getName());
             }
-            poID = sc.nextLine();
+            poID = ScannerUtils.inputString();
             boolean checkExists = checkExistPosition(positions, poID);
             if (!checkExists) {
                 System.out.println("Chọn sai, chọn lại!");
@@ -119,8 +119,15 @@ public class AccountFunction {
 
     public void deleteAccount() {
         System.out.println("Nhập ID cần xóa: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(ScannerUtils.inputString());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            }
+        }
         boolean check = accountController.delete(id);
         if (check) {
             System.out.println("Xóa thành công");
@@ -132,14 +139,21 @@ public class AccountFunction {
 
     public void updateAccount() {
         System.out.println("Nhập ID cần sửa: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(ScannerUtils.inputString());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            }
+        }
         System.out.println("Nhập email: ");
-        String email = sc.nextLine();
+        String email = ScannerUtils.inputString();
         System.out.println("Nhập username: ");
-        String username = sc.nextLine();
+        String username = ScannerUtils.inputString();
         System.out.println("Nhập fullName: ");
-        String fullName = sc.nextLine();
+        String fullName = ScannerUtils.inputString();
         System.out.println("Chọn ID department: ");
         List<Department> departments = departmentController.findAll();
         String depID;
@@ -147,7 +161,7 @@ public class AccountFunction {
             for (Department department : departments) {
                 System.out.println("ID: " + department.getId() + ", DepartmentName: " + department.getName());
             }
-            depID = sc.nextLine();
+            depID = ScannerUtils.inputString();
             boolean checkExists = checkExistDepartment(departments, depID);
             if (!checkExists) {
                 System.out.println("Chọn sai, chọn lại!");
@@ -163,7 +177,7 @@ public class AccountFunction {
             for (Position position : positions) {
                 System.out.println("ID: " + position.getId() + ", PositionName: " + position.getName());
             }
-            poID = sc.nextLine();
+            poID = ScannerUtils.inputString();
             boolean checkExists = checkExistPosition(positions, poID);
             if (!checkExists) {
                 System.out.println("Chọn sai, chọn lại!");

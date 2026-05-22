@@ -10,7 +10,7 @@ public class JDBCUtils {
         Class.forName("com.mysql.cj.jdbc.Driver");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, username, password);
+            DriverManager.getConnection(url, username, password);
         } catch (Exception e) {
             System.out.println("Kết nối với database không thành công" + e.getMessage());
         }

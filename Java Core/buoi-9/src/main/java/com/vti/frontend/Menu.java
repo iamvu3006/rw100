@@ -1,9 +1,9 @@
 package com.vti.frontend;
 
-import java.util.Scanner;
+import com.vti.utils.ScannerUtils;
 
 public class Menu {
-    private Scanner sc = new Scanner(System.in);
+    // use ScannerUtils for input
 
     public void run() throws ClassNotFoundException {
         while (true) {
@@ -11,7 +11,7 @@ public class Menu {
             System.out.println("1. Làm việc với department");
             System.out.println("2. Làm việc với position");
             System.out.println("3. Làm việc với account");
-            String choice = sc.nextLine();
+            String choice = ScannerUtils.inputString();
             switch (choice) {
                 case "1":
                     DepartmentFunction departmentFunction = new DepartmentFunction();

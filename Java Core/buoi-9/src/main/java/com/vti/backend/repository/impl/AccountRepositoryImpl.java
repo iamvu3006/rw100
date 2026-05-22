@@ -21,16 +21,19 @@ public class AccountRepositoryImpl implements IAccountRepository {
     @Override
     public List<Account> findAll() {
         List<Account> accounts = new ArrayList<>();// lưu lại dữ liệu lấy từ DB
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
         try {
             // b1: kết nối đến DB
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             // b2: lấy dữ liệu từ bảng account
             String sql = "select acc.*, de.department_name, po.position_name \n" +
                     "from account acc\n" +
                     "left join department de on acc.department_id = de.department_id\n" +
                     "left join position po on acc.position_id = po.position_id;";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
+            statement = connection.createStatement();
+            rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
             while (rs.next()) {// lặp qua qua từng dòng của rs
                 Integer id = rs.getInt("account_id");// lấy giá trị từ cloumn account_id
                 String email = rs.getString("email");//lấy giá trị từ cloumn account_name
@@ -51,19 +54,23 @@ public class AccountRepositoryImpl implements IAccountRepository {
         } catch (Exception e) {
             System.out.println("Kết nối DB ko thành công");
             e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection, statement, rs);
         }
         return accounts;
     }
 
     @Override
     public boolean create(String email, String username, String fullName, int departmentID, int positionID) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
             // b1: kết nối đến DB
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             // b2: tiến hành thêm mới account
             String sql = "INSERT INTO account (email, username, full_name, department_id, position_id)\n" +
                     "VALUES (?, ?, ?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, username);
             preparedStatement.setString(3, fullName);
@@ -74,19 +81,23 @@ public class AccountRepositoryImpl implements IAccountRepository {
             return  c > 0;
         } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
             e.printStackTrace();// show ra exception
+        } finally {
+            JDBCUtils.closeConnection(connection, preparedStatement, null);
         }
         return false;
     }
 
     @Override
     public boolean update(int id, String updateName, String email, String username, int departmentId, int positionId) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
             // b1: kết nối đến DB
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             // b2: tiến hành update account
             String sql = "update account set full_name = ?, email = ?, username = ?, department_id = ?, position_id = ? " +
                     "where account_id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, updateName);
             preparedStatement.setString(2, email);
             preparedStatement.setString(3, username);
@@ -98,24 +109,30 @@ public class AccountRepositoryImpl implements IAccountRepository {
             return  c > 0;
         } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
             e.printStackTrace();// show ra exception
+        } finally {
+            JDBCUtils.closeConnection(connection, preparedStatement, null);
         }
         return false;
     }
 
     @Override
     public boolean delete(int id) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
         try {
             // b1: kết nối đến DB
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             // b2: tiến hành xóa account
             String sql = "delete from account where account_id = ?;";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
 
             int c = preparedStatement.executeUpdate();// executeUpdate sẽ trả về 1 số nguyên, đại diện cho số dòng bị thay đổi trong DB
             return  c > 0;
         } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
             e.printStackTrace();// show ra exception
+        } finally {
+            JDBCUtils.closeConnection(connection, preparedStatement, null);
         }
         return false;
     }
@@ -123,16 +140,19 @@ public class AccountRepositoryImpl implements IAccountRepository {
     @Override
     public Map<String, Account> mapAccountByUsername() {
         Map<String, Account> mapAccountByUsername = new HashMap<>();
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet rs = null;
         try {
             // b1: kết nối đến DB
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             // b2: lấy dữ liệu từ bảng account
             String sql = "select acc.*, de.department_name, po.position_name \n" +
                     "from account acc\n" +
                     "left join department de on acc.department_id = de.department_id\n" +
                     "left join position po on acc.position_id = po.position_id;";
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
+            statement = connection.createStatement();
+            rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
             while (rs.next()) {// lặp qua qua từng dòng của rs
                 Integer id = rs.getInt("account_id");// lấy giá trị từ cloumn account_id
                 String email = rs.getString("email");//lấy giá trị từ cloumn account_name
@@ -154,6 +174,8 @@ public class AccountRepositoryImpl implements IAccountRepository {
         } catch (Exception e) {
             System.out.println("Kết nối DB ko thành công");
             e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection, statement, rs);
         }
         return mapAccountByUsername;
     }
@@ -209,8 +231,12 @@ public class AccountRepositoryImpl implements IAccountRepository {
     }
 
     private int executeCount(String sql, Object firstParam, Integer secondParam) throws ClassNotFoundException {
-        try (Connection connection = JDBCUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        try {
+            connection = JDBCUtils.getConnection();
+            preparedStatement = connection.prepareStatement(sql);
             if (firstParam instanceof String) {
                 preparedStatement.setString(1, (String) firstParam);
             } else if (firstParam instanceof Integer) {
@@ -220,14 +246,15 @@ public class AccountRepositoryImpl implements IAccountRepository {
                 preparedStatement.setInt(2, secondParam);
             }
 
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
+            rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
             }
         } catch (Exception e) {
             System.out.println("Lỗi khi kiểm tra account: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection, preparedStatement, rs);
         }
         return 0;
     }

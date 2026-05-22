@@ -2,13 +2,13 @@ package com.vti.frontend;
 
 import com.vti.backend.controller.DepartmentController;
 import com.vti.entity.Department;
+import com.vti.utils.ScannerUtils;
 
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class DepartmentFunction {
-    private static Scanner scanner = new Scanner(System.in);
+    // use ScannerUtils to centralize input validation
 
     //khởi tạo đối tượng Controller
     private DepartmentController departmentController = new DepartmentController();
@@ -23,7 +23,7 @@ public class DepartmentFunction {
             System.out.println("5. Tìm kiếm phòng ban");
             System.out.println("6. Thoát");
 
-            String choice = scanner.nextLine();
+            String choice = ScannerUtils.inputString();
             switch (choice) {
                 case "1":
                     List<Department> departments = departmentController.findAllDepartment();
@@ -52,7 +52,7 @@ public class DepartmentFunction {
 
     private void insertDepartment() throws ClassNotFoundException {
         System.out.println("Nhập tên phòng ban mới:");
-        String name = scanner.nextLine();
+        String name = ScannerUtils.inputString();
         Department department = new Department();
         department.setName(name);
         boolean result = departmentController.insertDepartment(department);
@@ -65,9 +65,17 @@ public class DepartmentFunction {
 
     private void updateDepartment() throws ClassNotFoundException {
         System.out.println("Nhập ID phòng ban cần update:");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(ScannerUtils.inputString());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            }
+        }
         System.out.println("Nhập tên phòng ban sau khi update:");
-        String name = scanner.nextLine();
+        String name = ScannerUtils.inputString();
         
         Department department = new Department(id, name);
         boolean result = departmentController.updateDepartment(department);
@@ -80,7 +88,15 @@ public class DepartmentFunction {
 
     private void deleteDepartment() throws ClassNotFoundException {
         System.out.println("Nhập ID phòng ban cần xóa:");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(ScannerUtils.inputString());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            }
+        }
         
         boolean result = departmentController.deleteDepartment(id);
         if (result) {
@@ -92,14 +108,24 @@ public class DepartmentFunction {
 
     private void findDepartmentByNameAndId() throws ClassNotFoundException {
         System.out.println("Nhập ID cần tìm (nhập 0 để bỏ qua):");
-        int id = Integer.parseInt(scanner.nextLine());
+        int id;
+        while (true) {
+            try {
+                id = Integer.parseInt(ScannerUtils.inputString());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            }
+        }
         System.out.println("Nhập tên phòng ban cần tìm (nhập để bỏ qua):");
-        String name = scanner.nextLine();
+        String name = ScannerUtils.inputString();
         
         // Lấy tất cả phòng ban rồi filter theo điều kiện
         List<Department> allDepartments = departmentController.findAllDepartment();
+        final int searchId = id;
+        final String searchName = name;
         List<Department> result = allDepartments.stream()
-            .filter(dept -> (id == 0 || dept.getId() == id) && (name.isEmpty() || dept.getName().contains(name)))
+            .filter(dept -> (searchId == 0 || dept.getId() == searchId) && (searchName.isEmpty() || dept.getName().contains(searchName)))
             .collect(Collectors.toList());
         
         if (result.isEmpty()) {
