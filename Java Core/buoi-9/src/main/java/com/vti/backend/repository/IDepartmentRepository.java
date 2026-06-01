@@ -3,13 +3,17 @@ package com.vti.backend.repository;
 import com.vti.entity.Department;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IDepartmentRepository {
-    List<Department> findAll() throws ClassNotFoundException;
-    boolean insert(Department department) throws ClassNotFoundException;
-    boolean update(Department department) throws ClassNotFoundException;
-    boolean delete(int id) throws ClassNotFoundException;
-    int countByName(String name) throws ClassNotFoundException;
-    int countByName(String name, Integer excludeId) throws ClassNotFoundException;
-    int countById(int id) throws ClassNotFoundException;
+    List<Department> findAll();
+    boolean create(String name);
+    boolean update(int id, String name);
+    boolean delete(int id);
+    boolean checkExistID(Integer id);
+    boolean checkExistNameAndIdNot(String name, Integer id);
+
+    boolean createListDepartment(List<Department> list);
+
+    Map<String, Department> mapByName();
 }

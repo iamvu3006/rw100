@@ -1,11 +1,17 @@
 package com.vti.backend.service;
-import java.util.List;
+
+import com.vti.dto.context.DepartmentContext;
+import com.vti.dto.csv.DepartmentCsv;
 import com.vti.entity.Department;
 
-public interface IDepartmentService {
-    List<Department> findAll() throws ClassNotFoundException;
-    boolean insert(Department department) throws ClassNotFoundException;
-    boolean update(Department department) throws ClassNotFoundException;
-    boolean delete(int id) throws ClassNotFoundException;
-    boolean checkExistName(String name, Integer id) throws ClassNotFoundException;
+import java.util.List;
+
+public interface IDepartmentService extends ImportFileCSV<DepartmentContext, Department, DepartmentCsv>{
+    List<Department> findAll();
+    boolean create(String name);
+    boolean update(int id, String name);
+    boolean delete(int id);
+    boolean checkExistNameAndIdNot(String name, Integer id);
+    boolean checkExistID(Integer id);
+    String importDepartmentFromCSV(String pathName);
 }

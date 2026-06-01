@@ -2,10 +2,12 @@ package com.vti.backend.repository;
 
 import com.vti.entity.Account;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 public interface IAccountRepository {
+    Map<String, Account> mapByUsername();
     List<Account> findAll();
 
     boolean create(String email, String username, String fullName, int departmentID, int positionID);
@@ -16,17 +18,15 @@ public interface IAccountRepository {
 
     Map<String, Account> mapAccountByUsername();
 
-    int countByUsername(String username) throws ClassNotFoundException;
+    Map<String, Account> mapAccountByEmail();
 
-    int countByUsername(String username, Integer excludeId) throws ClassNotFoundException;
+    boolean checkUsernameExist(String username, Integer id);
 
-    int countByEmail(String email) throws ClassNotFoundException;
+    boolean checkEmailExist(String email);
 
-    int countByEmail(String email, Integer excludeId) throws ClassNotFoundException;
+    boolean checkIdExist(Integer id);
 
-    int countById(int id) throws ClassNotFoundException;
+    boolean update(int id, String updateName);
 
-    int countDepartmentById(int departmentId) throws ClassNotFoundException;
-
-    int countPositionById(int positionId) throws ClassNotFoundException;
+    boolean createAccounts(List<Account> accounts);
 }

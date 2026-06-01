@@ -3,15 +3,19 @@ package com.vti.utils;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class ScannerUtils { //hỗ trợ nhập và validation dữ liệu
+public class ScannerUtils {// ho tro nhapp + validation du lieu
     private static Scanner scanner = new Scanner(System.in);
+    public static final String EMAIL_REGEX = "^[a-zA-Z0-9_+.-]+@[a-zA-Z0-9.-]+$";
+    public static final String NUMBER_REGEX = "^[0-9]+$";
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
+    public static final Integer ZERO = 0;
 
     public static String inputString() {
         String text;
-        while (true){
+        while (true) {
             text = scanner.nextLine();
             if (Objects.isNull(text) || text.trim().isEmpty()) {
-                System.out.println("Input không được để trống. Vui lòng nhập lại.");
+                System.out.println("Nhập lại:");
             } else {
                 return text;
             }
@@ -24,19 +28,18 @@ public class ScannerUtils { //hỗ trợ nhập và validation dữ liệu
             text = scanner.nextLine();
             try {
                 return Integer.parseInt(text);
-            } catch (NumberFormatException e) {
-                System.out.println("Input phải là số nguyên. Vui lòng nhập lại.");
+            } catch (Exception e) {
+                System.out.println("Vui long nhập số, chọn lại:");
             }
         }
     }
 
-    public static Integer inputIntGreaterThanZero() {
-        String text;
+    public static Integer inputIntGreaterThenZero() {
         while (true) {
             Integer integer = ScannerUtils.inputInt();
             if (integer <= 0) {
-                System.out.println("Input phải là số nguyên lớn hơn 0. Vui lòng nhập lại.");
-            } else {
+                System.out.println("Vui long nhập số > 0");
+            } else  {
                 return integer;
             }
         }
@@ -45,15 +48,17 @@ public class ScannerUtils { //hỗ trợ nhập và validation dữ liệu
     public static String inputEmail() {
         String email;
         while (true) {
+            // kiem tra xem có null  hay empty ko
             email = ScannerUtils.inputString();
 
-            //biểu thức chính quy
-            String regex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+            // bieu thuc chinh quy
+            String regex = EMAIL_REGEX;
             if (!email.matches(regex)) {
-                System.out.println("Email không hợp lệ. Vui lòng nhập lại.");
-            } else {
+                System.out.println("Sai định dạng email. Nhập lại:");
+            } else  {
                 return email;
             }
         }
     }
+
 }

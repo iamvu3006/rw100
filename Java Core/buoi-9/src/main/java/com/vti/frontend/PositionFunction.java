@@ -6,12 +6,12 @@ import com.vti.enums.PositionName;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.vti.utils.ScannerUtils;
+import java.util.Scanner;
 
 public class PositionFunction {
     // khoi tao positionController
     private PositionController positionController = new PositionController();
-    // use ScannerUtils for input validation
+    private Scanner sc = new Scanner(System.in);
 
 
     public void run() {
@@ -23,7 +23,7 @@ public class PositionFunction {
             System.out.println("3. Xóa position theo id");
             System.out.println("4. Update position theo ID");
             System.out.println("8. Thoát");
-            String choice = ScannerUtils.inputString();
+            String choice = sc.nextLine();
             switch (choice) {
                 case "1":
                     positions = positionController.findAll();
@@ -61,7 +61,7 @@ public class PositionFunction {
 
     public void insertPosition() {
         System.out.println("Nhập tên chức vụ: 1.DEV     2.TEST      3.SCRUM_MASTER      4.PM");
-        String choice = ScannerUtils.inputString();
+        String choice = sc.nextLine();
         PositionName name;
         switch (choice) {
             case "1":
@@ -87,15 +87,8 @@ public class PositionFunction {
 
     public void deletePosition() {
         System.out.println("Nhập ID chức vụ muốn xóa: ");
-        int id;
-        while (true) {
-            try {
-                id = Integer.parseInt(ScannerUtils.inputString());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
-            }
-        }
+        int id = sc.nextInt();
+        sc.nextLine();
         boolean check = positionController.delete(id);
         if (check) {
             System.out.println("Xóa thành công");
@@ -106,17 +99,10 @@ public class PositionFunction {
 
     public void updatePosition() {
         System.out.println("Nhập tên ID chức vụ cần sửa: ");
-        int id;
-        while (true) {
-            try {
-                id = Integer.parseInt(ScannerUtils.inputString());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
-            }
-        }
+        int id = sc.nextInt();
+        sc.nextLine();
         System.out.println("Nhập tên chức vụ: 1.DEV     2.TEST      3.SCRUM_MASTER      4.PM");
-        String choice = ScannerUtils.inputString();
+        String choice = sc.nextLine();
         PositionName name;
         switch (choice) {
             case "1":

@@ -11,7 +11,4 @@ public interface IPositionRepository {
     boolean create(PositionName name);
     boolean update(int id, PositionName name);
     boolean delete(int id);
-    int countByName(PositionName name) throws ClassNotFoundException;
-    int countByName(PositionName name, Integer excludeId) throws ClassNotFoundException;
-    int countById(int id) throws ClassNotFoundException;
 }

@@ -3,34 +3,43 @@ package com.vti.utils;
 import java.sql.*;
 
 public class JDBCUtils {
-    public static Connection getConnection() throws ClassNotFoundException, SQLException {
+    public static Connection getConnection() {
         String url = "jdbc:mysql://localhost:3306/rw100_testing_system";
         String username = "root";
         String password = "";// mk mysql
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection connection = null;
+
         try {
+            // b1: kết nối đến DB
             Class.forName("com.mysql.cj.jdbc.Driver");
-            DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(url, username, password);
+//            if (connection != null) {
+//                System.out.println("Kết nối DB thành công");
+//            }
         } catch (Exception e) {
-            System.out.println("Kết nối với database không thành công" + e.getMessage());
+            System.out.println("Kết nối DB ko thành công");
+            e.printStackTrace();
         }
-        return DriverManager.getConnection(url, username, password);
+        return connection;
     }
 
-    //close connection cho 3 interface: Connection, Statement, ResultSet
-    public static void closeConnection(Connection connection, Statement statement, ResultSet resultSet) {
+    // close cho 3 interface connection,statement,rs
+    public static void closeConnection(Connection connection, Statement statement, ResultSet rs) {
+        // nếu cái nào có dữ liệu (đang mở) != null
         try {
-            if (resultSet != null) {
-                resultSet.close();
+            if (connection != null) {
+                connection.close();
             }
             if (statement != null) {
                 statement.close();
             }
-            if (connection != null) {
-                connection.close();
+            if (rs != null) {
+                rs.close();
             }
         } catch (SQLException e) {
-            System.out.println("Lỗi khi đóng kết nối: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

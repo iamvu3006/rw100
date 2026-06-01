@@ -13,139 +13,84 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PositionRepositoryImpl implements IPositionRepository {
+
     @Override
     public List<Position> findAll() {
-        List<Position> positions = new ArrayList<>();
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet rs = null;
+        List<Position> positions = new ArrayList<>();// lưu lại dữ liệu lấy từ DB
         try {
-            connection = JDBCUtils.getConnection();
-            String sql = "SELECT * FROM position";
-            statement = connection.createStatement();
-            rs = statement.executeQuery(sql);
-            while (rs.next()) {
-                int id = rs.getInt("position_id");
-                String name = rs.getString("position_name");
-                positions.add(new Position(id, PositionName.valueOf(name)));
+            // b1: kết nối đến DB
+            Connection connection = JDBCUtils.getConnection();
+            // b2: lấy dữ liệu từ bảng position
+            String sql = "select * from position;";
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);// thực thi câu lệnh sql và gán bảng trả ra vào ResultSet rs
+            while (rs.next()) {// lặp qua qua từng dòng của rs
+                int id = rs.getInt("position_id");// lấy giá trị từ column position_id
+                String name = rs.getString("position_name");//lấy giá trị từ column position_name
+                PositionName positionName = PositionName.valueOf(name);
+
+                Position po = new Position(id, positionName);
+                positions.add(po);
             }
+
         } catch (Exception e) {
-            System.out.println("Kết nối DB ko thành công");
-            System.out.println(e.getMessage());
-        } finally {
-            JDBCUtils.closeConnection(connection, statement, rs);
+            e.printStackTrace();
         }
         return positions;
     }
 
     @Override
     public boolean create(PositionName name) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
         try {
-            connection = JDBCUtils.getConnection();
-            String sql = "INSERT INTO position (position_name) VALUES (?)";
-            preparedStatement = connection.prepareStatement(sql);
+            // b1: kết nối đến DB
+            Connection connection = JDBCUtils.getConnection();
+            // b2: tiến hành thêm mới position
+            String sql = "insert into position (position_name) values (?);";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name.name());
-            return preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
-            System.out.println("Lỗi khi thêm position: " + e.getMessage());
-            return false;
-        } finally {
-            JDBCUtils.closeConnection(connection, preparedStatement, null);
+
+            int c = preparedStatement.executeUpdate();// executeUpdate sẽ trả về 1 số nguyên, đại diện cho số dòng bị thay đổi trong DB
+            return c > 0;
+        } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
+            e.printStackTrace();// show ra exception
         }
+        return false;
     }
 
     @Override
     public boolean update(int id, PositionName name) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
         try {
-            connection = JDBCUtils.getConnection();
-            String sql = "UPDATE position SET position_name = ? WHERE position_id = ?";
-            preparedStatement = connection.prepareStatement(sql);
+            // b1: kết nối đến DB
+            Connection connection = JDBCUtils.getConnection();
+            // b2: tiến hành update position
+            String sql = "update position set position_name = ? where position_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name.name());
             preparedStatement.setInt(2, id);
-            return preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
-            System.out.println("Lỗi khi cập nhật position: " + e.getMessage());
-            return false;
-        } finally {
-            JDBCUtils.closeConnection(connection, preparedStatement, null);
+
+            int c = preparedStatement.executeUpdate();// executeUpdate sẽ trả về 1 số nguyên, đại diện cho số dòng bị thay đổi trong DB
+            return  c > 0;
+        } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
+            e.printStackTrace();// show ra exception
         }
+        return false;
     }
 
     @Override
     public boolean delete(int id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
         try {
-            connection = JDBCUtils.getConnection();
-            String sql = "DELETE FROM position WHERE position_id = ?";
-            preparedStatement = connection.prepareStatement(sql);
+            // b1: kết nối đến DB
+            Connection connection = JDBCUtils.getConnection();
+            // b2: tiến hành xóa position
+            String sql = "delete from position where position_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
-        } catch (Exception e) {
-            System.out.println("Lỗi khi xóa position: " + e.getMessage());
-            return false;
-        } finally {
-            JDBCUtils.closeConnection(connection, preparedStatement, null);
-        }
-    }
 
-    @Override
-    public int countByName(PositionName name) {
-        return countByName(name, null);
-    }
-
-    @Override
-    public int countByName(PositionName name, Integer excludeId) {
-        String sql = "SELECT COUNT(1) FROM position WHERE LOWER(TRIM(position_name)) = LOWER(TRIM(?))";
-        if (excludeId != null) {
-            sql += " AND position_id <> ?";
+            int c = preparedStatement.executeUpdate();// executeUpdate sẽ trả về 1 số nguyên, đại diện cho số dòng bị thay đổi trong DB
+            return c > 0;
+        } catch (Exception e) {// show các lỗi lien quan đén logic xử lý
+            e.printStackTrace();// show ra exception
         }
-
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
-        try {
-            connection = JDBCUtils.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name.name());
-            if (excludeId != null) {
-                preparedStatement.setInt(2, excludeId);
-            }
-            rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("Lỗi khi kiểm tra position: " + e.getMessage());
-        } finally {
-            JDBCUtils.closeConnection(connection, preparedStatement, rs);
-        }
-        return 0;
-    }
-
-    @Override
-    public int countById(int id) {
-        String sql = "SELECT COUNT(1) FROM position WHERE position_id = ?";
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet rs = null;
-        try {
-            connection = JDBCUtils.getConnection();
-            preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, id);
-            rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (Exception e) {
-            System.out.println("Lỗi khi kiểm tra id position: " + e.getMessage());
-        } finally {
-            JDBCUtils.closeConnection(connection, preparedStatement, rs);
-        }
-        return 0;
+        return false;
     }
 }

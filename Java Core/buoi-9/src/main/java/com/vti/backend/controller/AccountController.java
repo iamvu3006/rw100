@@ -31,4 +31,24 @@ public class AccountController {
     public Map<String, Account> mapAccountByUsername() {
         return accountService.mapAccountByUsername();
     }
+
+    public boolean checkUsernameExist(String username, Integer id) {
+        return accountService.checkUsernameExist(username, id);
+    }
+
+    public boolean checkEmailExist(String email) {
+        return accountService.checkEmailExist(email);
+    }
+
+    public boolean checkIdExist(Integer id) {
+        return accountService.checkIdExist(id);
+    }
+
+    public boolean update(int id, String updateName) {
+        return accountService.update(id, updateName);
+    }
+
+    public String importAccountFromCSV(String pathName) {
+        return accountService.importAccountFromCSV(pathName);
+    }
 }

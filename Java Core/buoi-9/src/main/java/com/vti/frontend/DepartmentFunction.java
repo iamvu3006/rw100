@@ -2,18 +2,17 @@ package com.vti.frontend;
 
 import com.vti.backend.controller.DepartmentController;
 import com.vti.entity.Department;
-import com.vti.utils.ScannerUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.Scanner;
 
 public class DepartmentFunction {
-    // use ScannerUtils to centralize input validation
-
-    //khởi tạo đối tượng Controller
+    private static Scanner scanner = new Scanner(System.in);
+    // khoi tao doi tuong controller
     private DepartmentController departmentController = new DepartmentController();
 
-    public void run() throws ClassNotFoundException {
+    public void run() {
         while (true) {
             System.out.println("=== Mời bạn chọn chức năng ===");
             System.out.println("1. Xem ds phòng ban");
@@ -21,127 +20,139 @@ public class DepartmentFunction {
             System.out.println("3. Update phòng ban");
             System.out.println("4. Xóa phòng ban");
             System.out.println("5. Tìm kiếm phòng ban");
-            System.out.println("6. Thoát");
+            System.out.println("6. Import file CSV");
+            System.out.println("7. Thoát");
 
-            String choice = ScannerUtils.inputString();
+            String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    List<Department> departments = departmentController.findAllDepartment();
-                    showDepartment(departments);
+                    // lay ds phong ban tu controller
+                    List<Department> departments = departmentController.findAll();
+                    this.showDepartment(departments);
                     break;
                 case "2":
-                    insertDepartment();
+                    this.insertDepartment();
                     break;
                 case "3":
-                    updateDepartment();
+                    this.updateDepartment();
                     break;
                 case "4":
-                    deleteDepartment();
-                    break;
-                case "5":
-                    findDepartmentByNameAndId();
+                    this.deleteDepartment();
                     break;
                 case "6":
-                    return;
+                    this.importDepartmentFromCSV();
+                    break;
                 default:
                     System.out.println("Chọn sai, chọn lại!");
-
             }
         }
     }
 
-    private void insertDepartment() throws ClassNotFoundException {
-        System.out.println("Nhập tên phòng ban mới:");
-        String name = ScannerUtils.inputString();
-        Department department = new Department();
-        department.setName(name);
-        boolean result = departmentController.insertDepartment(department);
-        if (result) {
-            System.out.println("✓ Thêm phòng ban thành công!");
-        } else {
-            System.out.println("✗ Thêm phòng ban thất bại!");
-        }
+    // đọc du lieu tu file CSV và luu vào DB
+    public void importDepartmentFromCSV() {
+        System.out.println("=== Import file CSV ===");
+        System.out.println("Mời bạn nhập đường dẫn đến file:");
+        //C:\Users\Admin\Desktop\rw100\csv\input_department.csv
+        String pathName = scanner.nextLine();
+        String message = departmentController.importDepartmentFromCSV(pathName);
+        System.out.println(message);
     }
 
-    private void updateDepartment() throws ClassNotFoundException {
-        System.out.println("Nhập ID phòng ban cần update:");
+    public void deleteDepartment() {
+        System.out.println("Nhập ID phòng ban cần xóa: ");
         int id;
         while (true) {
-            try {
-                id = Integer.parseInt(ScannerUtils.inputString());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
+            id = scanner.nextInt();
+            scanner.nextLine();
+            // kiem tra xem id co ton tai ko
+            if (id <= 0 ) {
+                System.out.println("Nhập lai ID: ");
+                continue;
             }
+            if (!departmentController.checkExistID(id)) {
+                System.out.println("ID nay ko ton tai, nhap lai: ");
+                continue;
+            }
+            break;
         }
-        System.out.println("Nhập tên phòng ban sau khi update:");
-        String name = ScannerUtils.inputString();
-        
-        Department department = new Department(id, name);
-        boolean result = departmentController.updateDepartment(department);
-        if (result) {
-            System.out.println("✓ Update phòng ban thành công!");
+        boolean check = departmentController.delete(id);
+        if (check) {
+            System.out.println("Xóa thành công");
         } else {
-            System.out.println("✗ Update phòng ban thất bại!");
+            System.out.println("Xóa không thành công");
         }
     }
 
-    private void deleteDepartment() throws ClassNotFoundException {
-        System.out.println("Nhập ID phòng ban cần xóa:");
-        int id;
+    public void insertDepartment() {
+        String name = "";
+        System.out.println("Nhập tên phòng ban: ");
         while (true) {
-            try {
-                id = Integer.parseInt(ScannerUtils.inputString());
+            name = scanner.nextLine();
+            // kiem tra xem ten có bị null hay empty hay ko
+            if (Objects.isNull(name) || name.trim().isEmpty()) {
+                System.out.println("Nhập lại tên: ");
+                continue;
+            } else {
+                // kiem tra xem ten da ton tai chua
+                if (departmentController.checkExistNameAndIdNot(name, null)) {
+                    System.out.println("Tên này đã được sử dụng, Nhập lại: ");
+                    continue;
+                }
                 break;
-            } catch (NumberFormatException e) {
-                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
             }
         }
-        
-        boolean result = departmentController.deleteDepartment(id);
-        if (result) {
-            System.out.println("✓ Xóa phòng ban thành công!");
+
+
+        boolean check = departmentController.create(name);
+        if (check) {
+            System.out.println("Thêm mới thành công");
         } else {
-            System.out.println("✗ Xóa phòng ban thất bại!");
+            System.out.println("Thêm không thành công");
         }
     }
 
-    private void findDepartmentByNameAndId() throws ClassNotFoundException {
-        System.out.println("Nhập ID cần tìm (nhập 0 để bỏ qua):");
-        int id;
-        while (true) {
-            try {
-                id = Integer.parseInt(ScannerUtils.inputString());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Giá trị phải là số nguyên. Vui lòng nhập lại.");
-            }
-        }
-        System.out.println("Nhập tên phòng ban cần tìm (nhập để bỏ qua):");
-        String name = ScannerUtils.inputString();
-        
-        // Lấy tất cả phòng ban rồi filter theo điều kiện
-        List<Department> allDepartments = departmentController.findAllDepartment();
-        final int searchId = id;
-        final String searchName = name;
-        List<Department> result = allDepartments.stream()
-            .filter(dept -> (searchId == 0 || dept.getId() == searchId) && (searchName.isEmpty() || dept.getName().contains(searchName)))
-            .collect(Collectors.toList());
-        
-        if (result.isEmpty()) {
-            System.out.println("Không tìm thấy phòng ban phù hợp!");
-        } else {
-            showDepartment(result);
-        }
-    }
-
-    private static void showDepartment(List<Department> departments) {
-        System.out.println("+--------------+------------------------------+");
-        System.out.printf("| %-12s | %-28s |%n", "ID", "Department Name");
-        System.out.println("+--------------+------------------------------+");
+    public void showDepartment(List<Department> departments) {
+        System.out.println("+-----+--------------------+");
+        System.out.printf("|%5s|%20s|\n", "ID", "Tên phòng ban");
+        System.out.println("+-----+--------------------+");
         for (Department department : departments) {
-            System.out.printf("| %-12d | %-28s |%n", department.getId(), department.getName());
+            System.out.printf("|%5s|%20s|\n", department.getId(), department.getName());
         }
-        System.out.println("+--------------+------------------------------+");
+        if (departments.size() == 0) {
+            System.out.println("Không tìm thấy");
+        }
+        System.out.println("+-----+--------------------+");
+    }
+
+    public void updateDepartment() {
+        System.out.println("Nhập ID phòng ban cần sửa: ");
+        Integer id = scanner.nextInt();
+        scanner.nextLine();
+        // kieem tra xem id hop le va ton tai
+
+        // kierm tra xem id co hop le va ton tai ko
+        System.out.println("Nhập tên phòng ban cần sửa: ");
+        String name= "";
+        while (true) {
+            name = scanner.nextLine();
+            // kiem tra xem ten có bị null hay empty hay ko
+            if (Objects.isNull(name) || name.trim().isEmpty()) {
+                System.out.println("Nhập lại tên: ");
+                continue;
+            } else {
+                // kiem tra xem ten da ton tai chua
+                if (departmentController.checkExistNameAndIdNot(name, id)) {
+                    System.out.println("Tên này đã được sử dụng, Nhập lại: ");
+                    continue;
+                }
+                break;
+            }
+        }
+        boolean check = departmentController.update(id, name);
+        if (check) {
+            System.out.println("Update thành công");
+        } else {
+            System.out.println("Update không thành công");
+        }
     }
 }
