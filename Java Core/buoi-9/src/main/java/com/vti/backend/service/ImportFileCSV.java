@@ -1,15 +1,12 @@
 package com.vti.backend.service;
 
 import com.vti.dto.ImportError;
-import com.vti.entity.Department;
-import com.vti.backend.repository.IDepartmentRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public interface ImportFileCSV<T, K, E> {
     // T là context chứa dữ liệu để validation
@@ -35,7 +32,7 @@ public interface ImportFileCSV<T, K, E> {
         List<K> entities = new ArrayList<>();
         List<ImportError<E>> importErrors = new ArrayList<>();// chua ds department se dc them moi
         try (BufferedReader br = new BufferedReader(new FileReader(pathName))) {// doc du lieu tu file
-            String line = "";
+            String line;
             br.readLine();// lay dòng dau tien, bo no di
             while ((line = br.readLine()) != null) {
                 //validation
@@ -47,6 +44,7 @@ public interface ImportFileCSV<T, K, E> {
             // xuat file loi
             this.exportFileError(importErrors, pathError);
         } catch (Exception e) {
+            return "Không thể import file CSV";
         }
         String message = "";
         if (importErrors.isEmpty()) {
@@ -57,7 +55,7 @@ public interface ImportFileCSV<T, K, E> {
         }
         if (!importErrors.isEmpty() && !entities.isEmpty()) {
             message = "Import thành công " + entities.size() +
-                    "entities, đã xuất lỗi ra file " + pathError;
+                    " entities, đã xuất lỗi ra file " + pathError;
         }
         return message;
     }

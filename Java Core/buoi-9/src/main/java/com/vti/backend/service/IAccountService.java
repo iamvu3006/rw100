@@ -1,12 +1,13 @@
 package com.vti.backend.service;
 
+import com.vti.dto.context.AccountContext;
+import com.vti.dto.csv.AccountCsv;
 import com.vti.entity.Account;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public interface IAccountService {
+public interface IAccountService extends ImportFileCSV<AccountContext, Account, AccountCsv> {
     List<Account> findAll();
 
     boolean create(String email, String username, String fullName, int departmentID, int positionID);
