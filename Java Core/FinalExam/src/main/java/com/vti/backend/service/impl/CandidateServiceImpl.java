@@ -1,7 +1,7 @@
 package com.vti.backend.service.impl;
 
 import com.vti.backend.repository.ICandidateRepository;
-import com.vti.backend.repository.impl.JdbcCandidateRepositoryImpl;
+import com.vti.backend.repository.impl.CandidateRepositoryImpl;
 import com.vti.backend.service.ICandidateService;
 import com.vti.entity.Candidate;
 import com.vti.entity.ExperienceCandidate;
@@ -10,7 +10,7 @@ import com.vti.enums.GraduationRank;
 import com.vti.utils.ValidationUtil;
 
 public class CandidateServiceImpl implements ICandidateService {
-    private final ICandidateRepository repository = new JdbcCandidateRepositoryImpl();
+    private final ICandidateRepository repository = new CandidateRepositoryImpl();
 
     @Override
     public boolean register(Candidate candidate) {
