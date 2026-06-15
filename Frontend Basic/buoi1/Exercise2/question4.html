@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question 4 - Register Form</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 600px; 
+            margin: 40px auto; 
+            padding: 20px;
+        }
+        h1 { text-align: center; color: #2c3e50; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="date"] {
+            width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        .radio-group, .checkbox-group { margin: 10px 0; }
+        button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+
+    <h1>Register</h1>
+    <p><em>Please fill in this form to create an account</em></p>
+
+    <form>
+        <label>Full name <span style="color:red">*</span></label>
+        <input type="text" placeholder="Input your fullname...">
+
+        <label>Username <span style="color:red">*</span></label>
+        <input type="text" placeholder="Input your username...">
+
+        <label>Password <span style="color:red">*</span></label>
+        <input type="password" placeholder="Input your password...">
+
+        <label>Email <span style="color:red">*</span></label>
+        <input type="email" placeholder="Input your email...">
+
+        <label>Telephone number <span style="color:red">*</span></label>
+        <input type="tel" placeholder="Input your phone number...">
+
+        <label>Input Object:</label>
+        <div class="radio-group">
+            <input type="radio" name="object" id="student"> 
+            <label for="student" style="display:inline;">Student</label>
+            
+            <input type="radio" name="object" id="teacher"> 
+            <label for="teacher" style="display:inline;">Teacher</label>
+        </div>
+
+        <label>Favorite:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" id="badminton"> 
+            <label for="badminton" style="display:inline;">Badminton</label>
+            
+            <input type="checkbox" id="volleyball"> 
+            <label for="volleyball" style="display:inline;">Volleyball</label>
+            
+            <input type="checkbox" id="football"> 
+            <label for="football" style="display:inline;">Football</label>
+        </div>
+
+        <label>Address <span style="color:red">*</span></label>
+        <select style="width:100%; padding:10px;">
+            <option>Bắc Giang</option>
+        </select>
+
+        <label>Birthday <span style="color:red">*</span></label>
+        <input type="date" placeholder="mm/dd/yyyy">
+
+        <label>Your picture <span style="color:red">*</span></label>
+        <input type="file" style="margin-top:5px;">
+
+        <button type="submit">Đăng ký</button>
+    </form>
+
+</body>
+</html>
