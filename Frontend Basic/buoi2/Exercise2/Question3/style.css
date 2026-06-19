@@ -1,0 +1,35 @@
+body{
+    font-family: Arial, sans-serif;
+}
+
+h3{
+    text-align:center;
+    color:white;
+    background:#3498db;
+    padding:10px;
+}
+
+ul{
+    list-style:none;
+    padding:0;
+}
+
+li{
+    border-bottom:1px solid #ccc;
+}
+
+a{
+    display:block;
+    padding:10px;
+    text-decoration:none;
+    color:#333;
+}
+
+a:hover{
+    background:#3498db;
+    color:white;
+}
+
+h1{
+    color:#3498db;
+}

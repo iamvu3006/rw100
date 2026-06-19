@@ -1,0 +1,22 @@
+*{
+    box-sizing:border-box;
+}
+
+.container{
+    width:1000px;
+    margin:auto;
+}
+
+.card{
+    width:300px;
+    float:left;
+    margin:10px;
+}
+
+.card img{
+    width:300px;
+}
+
+button{
+    float:right;
+}
