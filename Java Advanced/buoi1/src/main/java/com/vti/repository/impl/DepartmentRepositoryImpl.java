@@ -80,4 +80,20 @@ public class DepartmentRepositoryImpl implements IDepartmentRepository {
             session.close();
         }
     }
+
+    @Override
+    public void delete(Integer id) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        try {
+            // tìm department cần xóa
+            Department department = session.find(Department.class, id);
+            session.remove(department);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+    }
 }

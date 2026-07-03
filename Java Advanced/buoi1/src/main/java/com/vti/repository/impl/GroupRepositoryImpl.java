@@ -1,8 +1,7 @@
 package com.vti.repository.impl;
 
-import com.vti.entity.Position;
-import com.vti.enums.PositionName;
-import com.vti.repository.IPositionRepository;
+import com.vti.entity.Group;
+import com.vti.repository.IGroupRepository;
 import com.vti.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,15 +9,15 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class PositionRepositoryImpl implements IPositionRepository {
+public class GroupRepositoryImpl implements IGroupRepository {
     private final SessionFactory sessionFactory = HibernateUtils.sessionFactory;
 
     @Override
-    public List<Position> findAll() {
+    public List<Group> findAll() {
         Session session = sessionFactory.openSession();
         try {
-            String hql = "FROM Position";
-            Query<Position> query = session.createQuery(hql, Position.class);
+            String hql = "FROM Group";
+            Query<Group> query = session.createQuery(hql, Group.class);
             return query.list();
         } finally {
             session.close();
@@ -26,21 +25,21 @@ public class PositionRepositoryImpl implements IPositionRepository {
     }
 
     @Override
-    public Position findById(Integer id) {
+    public Group findById(Integer id) {
         Session session = sessionFactory.openSession();
         try {
-            return session.find(Position.class, id);
+            return session.find(Group.class, id);
         } finally {
             session.close();
         }
     }
 
     @Override
-    public void create(Position position) {
+    public void create(Group group) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try {
-            session.persist(position);
+            session.persist(group);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -50,13 +49,13 @@ public class PositionRepositoryImpl implements IPositionRepository {
     }
 
     @Override
-    public void update(Integer id, PositionName newName) {
+    public void update(Integer id, String newGroupName) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try {
-            // tìm position cần update
-            Position position = session.find(Position.class, id);
-            position.setName(newName);
+            // tìm group cần update
+            Group group = session.find(Group.class, id);
+            group.setGroupName(newGroupName);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
@@ -70,21 +69,14 @@ public class PositionRepositoryImpl implements IPositionRepository {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try {
-            // tìm position cần xóa
-            Position position = session.find(Position.class, id);
-            session.remove(position);
+            // tìm group cần xóa
+            Group group = session.find(Group.class, id);
+            session.remove(group);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-    }
-
-    public static void main(String[] args) {
-        IPositionRepository repository = new PositionRepositoryImpl();
-        Position position = new Position();
-        position.setName(PositionName.DEV);
-        repository.create(position);
     }
 }

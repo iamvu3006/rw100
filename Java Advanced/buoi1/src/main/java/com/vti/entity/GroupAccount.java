@@ -30,4 +30,14 @@ public class GroupAccount {
 
     @Column(name = "join_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime joinDate;
+
+    @Override
+    public String toString() {
+        return "GroupAccount{" +
+                "id=" + id +
+                ", account=" + account +
+                ", group=" + group +
+                ", joinDate=" + joinDate +
+                '}';
+    }
 }
