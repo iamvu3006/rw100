@@ -9,6 +9,8 @@ public interface IDepartmentService {
 
     Department findById(Integer id);
 
+    Department findByName(String name);
+
     void deleteById(Integer id);
 
     void create(Department department);

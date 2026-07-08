@@ -9,6 +9,8 @@ public interface IPositionService {
 
     Position findById(Integer id);
 
+    Position findByName(String name);
+
     void deleteById(Integer id);
 
     void create(Position position);

@@ -1,5 +1,6 @@
 package com.vti.controller;
 
+import com.vti.dto.AccountDTO;
 import com.vti.entity.Account;
 import com.vti.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,15 @@ public class AccountController {
 
     // lấy ra ds account
     @GetMapping
-    public ResponseEntity<List<Account>> findAll() {
-        List<Account> accounts = accountService.findAll();
+    public ResponseEntity<List<AccountDTO>> findAll() {
+        List<AccountDTO> accounts = accountService.findAll();
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     // lấy ra thông tin account theo id - khóa chính
     @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/accounts/1
-    public ResponseEntity<Account> findById(@PathVariable(name = "idSearch") Integer id) {
-        Account account = accountService.findById(id);
+    public ResponseEntity<AccountDTO> findById(@PathVariable(name = "idSearch") Integer id) {
+        AccountDTO account = accountService.findById(id);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 

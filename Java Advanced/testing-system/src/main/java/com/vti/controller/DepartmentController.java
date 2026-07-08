@@ -31,6 +31,13 @@ public class DepartmentController {
         return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
+    // lấy ra thông tin department theo tên - khóa duy nhất
+    @GetMapping("/name/{nameSearch}")// http://localhost:8080/api/v1/departments/name/IT
+    public ResponseEntity<Department> findByName(@PathVariable(name = "nameSearch") String name) {
+        Department department = departmentService.findByName(name);
+        return new ResponseEntity<>(department, HttpStatus.OK);
+    }
+
     // xóa theo id
     @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/departments/13
     public ResponseEntity<String> deleteById(@PathVariable(name = "idDelete") Integer id) {

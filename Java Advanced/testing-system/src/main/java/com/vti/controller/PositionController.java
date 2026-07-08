@@ -24,14 +24,14 @@ public class PositionController {
     }
 
     // lấy ra thông tin position theo id - khóa chính
-    @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/positions/1
+    @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/positions
     public ResponseEntity<Position> findById(@PathVariable(name = "idSearch") Integer id) {
         Position position = positionService.findById(id);
         return new ResponseEntity<>(position, HttpStatus.OK);
     }
 
     // xóa theo id
-    @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/positions/1
+    @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/positions
     public ResponseEntity<String> deleteById(@PathVariable(name = "idDelete") Integer id) {
         positionService.deleteById(id);
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
@@ -50,5 +50,12 @@ public class PositionController {
                                          @PathVariable(name = "idUpdate") Integer id) {
         positionService.update(position, id);
         return new ResponseEntity<>("Update thành công", HttpStatus.OK);
+    }
+
+    //tìm kiếm theo position_name
+    @GetMapping("/name/{nameSearch}")// http://localhost:8080/api/v1/positions/name/DEV
+    public ResponseEntity<Position> findByName(@PathVariable(name = "nameSearch") String name) {
+        Position position = positionService.findByName(name);
+        return new ResponseEntity<>(position, HttpStatus.OK);
     }
 }

@@ -1,15 +1,19 @@
 package com.vti.service.impl;
 
+import com.vti.dto.AccountDTO;
 import com.vti.entity.Account;
+import com.vti.entity.Department;
 import com.vti.entity.Position;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.IPositionRepository;
 import com.vti.service.IAccountService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -20,16 +24,33 @@ public class AccountServiceImpl implements IAccountService {
     @Autowired
     private IPositionRepository positionRepository;// dùng để xử lý khóa ngoại position_id
 
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private AccountServiceImpl departmentRepository;
+
+    @Autowired
+    private AccountServiceImpl positionRepository;
+
     @Override
-    public List<Account> findAll() {
+    public List<AccountDTO> findAll() {
         List<Account> accounts = accountRepository.findAll();
-        return accounts;
+        // chuyển list account thành list accountDTO
+        return accounts.stream()
+                .map(account -> modelMapper.map(account, AccountDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Account findById(Integer id) {
+    public AccountDTO findById(Integer id) {
         Account account = accountRepository.findById(id).orElse(null);
-        return account;
+        AccountDTO dto = null;
+        if (Objects.nonNull(account)) {
+            // chuyển lẻn từng account -> accountDTO
+            dto = modelMapper.map(account, AccountDTO.class);
+        }
+        return dto;
     }
 
     @Override
@@ -54,6 +75,7 @@ public class AccountServiceImpl implements IAccountService {
     public void update(Account account, Integer id) {
         // tìm account cần update theo id
         Account accountUpdate = accountRepository.findById(id).orElse(null);
+        Department department = departmentRepository.findById(account.getDepartment().getId()).orElse(null);
         if (Objects.isNull(accountUpdate)) {
             throw new RuntimeException("ID not found!");
         } else {

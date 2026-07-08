@@ -31,6 +31,11 @@ public class DepartmentServiceImpl implements IDepartmentService {
     }
 
     @Override
+    public Department findByName(String name) {
+        return departmentRepository.findByName(name);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         departmentRepository.deleteById(id);
     }
@@ -47,6 +52,9 @@ public class DepartmentServiceImpl implements IDepartmentService {
         if (Objects.isNull(departmentUpdate)) {
             throw new RuntimeException("ID not found!");
         } else {
+            if (departmentRepository.existsByNameAndIdNot(department.getName(), id)) {
+                throw new RuntimeException("Department name already exists!");
+            }
             // lưu lại thông tin update
             departmentUpdate.setName(department.getName());
             departmentRepository.save(departmentUpdate);

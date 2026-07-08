@@ -28,6 +28,11 @@ public class PositionServiceImpl implements IPositionService {
     }
 
     @Override
+    public Position findByName(String name) {
+        return positionRepository.findByName(name);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         positionRepository.deleteById(id);
     }

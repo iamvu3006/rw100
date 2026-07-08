@@ -34,6 +34,11 @@ public class Account {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
+    // khóa ngoại: 1 account thuộc về 1 department, 1 department có thể có nhiều account (n-1)
+    @ManyToOne
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
+    private Department department;
+
     // khóa ngoại: 1 account thuộc về 1 position, 1 position có thể có nhiều account (n-1)
     @ManyToOne
     @JoinColumn(name = "position_id", referencedColumnName = "position_id")
