@@ -1,46 +1,52 @@
 package com.vti.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "account")// mapping đến bảng account trong DB
+@Table(name = "account")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Account {
     @Id// đại diện cho khóa chính
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
-    @Column(name = "account_id")// trường này cho biết là thuộc tính này map với cột account_id trong DB
+    @Column(name = "account_id")// trường này cho biết là thuộc tính này map với cột department_id trong DB
     private Integer id;
 
-    //username varchar(50) not null unique
-    @Column(name = "username", nullable = false, unique = true, length = 50)
+    @Column(name = "username", nullable = false, unique = true, length = 100)//
     private String username;
 
-    //password varchar(255) not null
-    @Column(name = "password", nullable = false, length = 255)
-    private String password;
+    @Column(name = "full_name", nullable = false, length = 100)//
+    private String fullName;
 
-    //email varchar(100) not null unique
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    //full_name varchar(100)
-    @Column(name = "full_name", length = 100)
-    private String fullName;
-
-    // khóa ngoại: 1 account thuộc về 1 department, 1 department có thể có nhiều account (n-1)
+    // cấu hình khóa ngoại
     @ManyToOne
-    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
+    @JoinColumn(name = "department_id")
     private Department department;
 
-    // khóa ngoại: 1 account thuộc về 1 position, 1 position có thể có nhiều account (n-1)
     @ManyToOne
-    @JoinColumn(name = "position_id", referencedColumnName = "position_id")
+    @JoinColumn(name = "position_id")
     private Position position;
+
+    @Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private LocalDateTime createdDate;
 }

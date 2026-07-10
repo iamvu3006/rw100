@@ -1,12 +1,19 @@
 package com.vti.controller;
 
 import com.vti.dto.AccountDTO;
-import com.vti.entity.Account;
+import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,39 +24,31 @@ public class AccountController {
     @Autowired
     private IAccountService accountService;
 
-    // lấy ra ds account
     @GetMapping
     public ResponseEntity<List<AccountDTO>> findAll() {
-        List<AccountDTO> accounts = accountService.findAll();
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
+        return new ResponseEntity<>(accountService.findAll(), HttpStatus.OK);
     }
 
-    // lấy ra thông tin account theo id - khóa chính
-    @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/accounts/1
-    public ResponseEntity<AccountDTO> findById(@PathVariable(name = "idSearch") Integer id) {
-        AccountDTO account = accountService.findById(id);
-        return new ResponseEntity<>(account, HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountDTO> findById(@PathVariable(name = "id") Integer id) {
+        return new ResponseEntity<>(accountService.findById(id), HttpStatus.OK);
     }
 
-    // xóa theo id
-    @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/accounts/1
-    public ResponseEntity<String> deleteById(@PathVariable(name = "idDelete") Integer id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable(name = "id") Integer id) {
         accountService.deleteById(id);
-        return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
-    // tạo mới 1 account
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Account account) {
-        accountService.create(account);
-        return new ResponseEntity<>("Tạo mới thành công", HttpStatus.CREATED);
+    public ResponseEntity<String> create(@RequestBody AccountCreateOrUpdateForm form) {
+        accountService.create(form);
+        return new ResponseEntity<>("Created", HttpStatus.OK);
     }
 
-    // update theo id
-    @PutMapping("/{idUpdate}")
-    public ResponseEntity<String> update(@RequestBody Account account,
-                                         @PathVariable(name = "idUpdate") Integer id) {
-        accountService.update(account, id);
-        return new ResponseEntity<>("Update thành công", HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<String> update(@RequestBody AccountCreateOrUpdateForm form, @PathVariable(name = "id") Integer id) {
+        accountService.update(form, id);
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
     }
 }

@@ -6,29 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Objects;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountDTO {
     private Integer id;
-    private String fullName;
     private String username;
-    private String departmentName;
-    private String positionName;
+    private String fullName;
+    private String departmentName;//department   Name
+    private String positionName;//position       Name
+    //.. 20 thuộc tính
 
-    //constructor
-    public AccountDTO(Account account) {
-        this.id = account.getId();
-        this.fullName = account.getFullName();
-        this.username = account.getUsername();
-        if (Objects.nonNull(account.getDepartment())) {
-            this.departmentName = account.getDepartment().getName();
-        }
-        if (Objects.nonNull(account.getPosition())) {
-            this.positionName = account.getPosition().getName().name();
-        }
-    }
+//    public AccountDTO(Account account) {
+//        this.id = account.getId();
+//        this.fullName = account.getFullName();
+//        this.username = account.getUsername();
+//        this.departmentName = account.getDepartment().getName();
+//        this.positionName = account.getPosition().getName().name();
+//        // = 20 lần
+//    }
 }

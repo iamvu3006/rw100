@@ -1,8 +1,12 @@
 package com.vti.service.impl;
 
+import com.vti.dto.PositionDTO;
 import com.vti.entity.Position;
+import com.vti.form.PositionCreateOrUpdateForm;
+import com.vti.repository.IAccountRepository;
 import com.vti.repository.IPositionRepository;
 import com.vti.service.IPositionService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +19,26 @@ public class PositionServiceImpl implements IPositionService {
     @Autowired
     private IPositionRepository positionRepository;
 
+    @Autowired
+    private IAccountRepository accountRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public List<Position> findAll() {
-        List<Position> positions = positionRepository.findAll();
-        return positions;
+    public List<PositionDTO> findAll() {
+        return positionRepository.findAll().stream()
+                .map(position -> modelMapper.map(position, PositionDTO.class))
+                .toList();
     }
 
     @Override
-    public Position findById(Integer id) {
+    public PositionDTO findById(Integer id) {
         Position position = positionRepository.findById(id).orElse(null);
-        return position;
-    }
-
-    @Override
-    public Position findByName(String name) {
-        return positionRepository.findByName(name);
+        if (Objects.isNull(position)) {
+            return null;
+        }
+        return modelMapper.map(position, PositionDTO.class);
     }
 
     @Override
@@ -38,20 +47,19 @@ public class PositionServiceImpl implements IPositionService {
     }
 
     @Override
-    public void create(Position position) {
-        positionRepository.save(position);
+    public void create(PositionCreateOrUpdateForm position) {
+        Position newPosition = new Position();
+        newPosition.setName(position.getName());
+        positionRepository.save(newPosition);
     }
 
     @Override
-    public void update(Position position, Integer id) {
-        // tìm position cần update theo id
+    public void update(PositionCreateOrUpdateForm position, Integer id) {
         Position positionUpdate = positionRepository.findById(id).orElse(null);
         if (Objects.isNull(positionUpdate)) {
-            throw new RuntimeException("ID not found!");
-        } else {
-            // lưu lại thông tin update
-            positionUpdate.setName(position.getName());
-            positionRepository.save(positionUpdate);
+            throw new RuntimeException("Position Not Found");
         }
+        positionUpdate.setName(position.getName());
+        positionRepository.save(positionUpdate);
     }
 }

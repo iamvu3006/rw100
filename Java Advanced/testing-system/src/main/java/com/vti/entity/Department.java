@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "department")// mapping đến bảng department trong DB
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Department {
     @Id// đại diện cho khóa chính
     @GeneratedValue(strategy = GenerationType.IDENTITY)// auto_increment
@@ -21,4 +23,5 @@ public class Department {
     //department_name varchar(100) not null unique
     @Column(name = "department_name", nullable = false, unique = true, length = 100)//
     private String name;
+    // 20 thuộc tính
 }

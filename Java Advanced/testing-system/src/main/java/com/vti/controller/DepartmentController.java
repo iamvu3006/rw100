@@ -1,13 +1,21 @@
 package com.vti.controller;
 
-import com.vti.entity.Department;
+import com.vti.dto.DepartmentDTO;
+import com.vti.form.DepartmentCreateOrUpdateForm;
 import com.vti.service.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -15,48 +23,39 @@ import java.util.List;
 public class DepartmentController {
 
     @Autowired
-    private IDepartmentService departmentService;// = new ();
+    private IDepartmentService departmentService;
 
-    // lấy ra ds department
     @GetMapping
-    public ResponseEntity<List<Department>> findAll() {
-        List<Department> departments = departmentService.findAll();
-        return new ResponseEntity<>(departments, HttpStatus.OK);
+    public ResponseEntity<List<DepartmentDTO>> findAll() {
+        return new ResponseEntity<>(departmentService.findAll(), HttpStatus.OK);
     }
 
-    //lay ra thong tin department theo id  - khóa chính
-    @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/departments/13
-    public ResponseEntity<Department> findById(@PathVariable(name = "idSearch") Integer id) {
-        Department department = departmentService.findById(id);
-        return new ResponseEntity<>(department, HttpStatus.OK);
+    @GetMapping("/{idSearch}")
+    public ResponseEntity<DepartmentDTO> findById(@PathVariable(name = "idSearch") Integer id) {
+        return new ResponseEntity<>(departmentService.findById(id), HttpStatus.OK);
     }
 
-    // lấy ra thông tin department theo tên - khóa duy nhất
-    @GetMapping("/name/{nameSearch}")// http://localhost:8080/api/v1/departments/name/IT
-    public ResponseEntity<Department> findByName(@PathVariable(name = "nameSearch") String name) {
-        Department department = departmentService.findByName(name);
-        return new ResponseEntity<>(department, HttpStatus.OK);
+    @GetMapping("/search")
+    public ResponseEntity<DepartmentDTO> findByName(@RequestParam(name = "name") String name) {
+        return new ResponseEntity<>(departmentService.findByName(name), HttpStatus.OK);
     }
 
-    // xóa theo id
-    @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/departments/13
+    @DeleteMapping("/{idDelete}")
     public ResponseEntity<String> deleteById(@PathVariable(name = "idDelete") Integer id) {
         departmentService.deleteById(id);
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 
-    // tao moi 1 department
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Department department) {
-        departmentService.create(department);
+    public ResponseEntity<String> create(@RequestBody DepartmentCreateOrUpdateForm form) {
+        departmentService.create(form);
         return new ResponseEntity<>("Tạo mới thành công", HttpStatus.CREATED);
     }
 
-    // update theo id
     @PutMapping("/{idUpdate}")
-    public ResponseEntity<String> update(@RequestBody Department department,
+    public ResponseEntity<String> update(@RequestBody DepartmentCreateOrUpdateForm form,
                                          @PathVariable(name = "idUpdate") Integer id) {
-        departmentService.update(department, id);
+        departmentService.update(form, id);
         return new ResponseEntity<>("Update thành công", HttpStatus.OK);
     }
 }

@@ -4,7 +4,9 @@ import com.vti.dto.AccountDTO;
 import com.vti.entity.Account;
 import com.vti.entity.Department;
 import com.vti.entity.Position;
+import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.repository.IAccountRepository;
+import com.vti.repository.IDepartmentRepository;
 import com.vti.repository.IPositionRepository;
 import com.vti.service.IAccountService;
 import org.modelmapper.ModelMapper;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -22,24 +23,25 @@ public class AccountServiceImpl implements IAccountService {
     private IAccountRepository accountRepository;
 
     @Autowired
-    private IPositionRepository positionRepository;// dùng để xử lý khóa ngoại position_id
-
-    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
-    private AccountServiceImpl departmentRepository;
+    private IDepartmentRepository departmentRepository;
 
     @Autowired
-    private AccountServiceImpl positionRepository;
+    private IPositionRepository positionRepository;
 
     @Override
     public List<AccountDTO> findAll() {
         List<Account> accounts = accountRepository.findAll();
-        // chuyển list account thành list accountDTO
-        return accounts.stream()
-                .map(account -> modelMapper.map(account, AccountDTO.class))
-                .collect(Collectors.toList());
+//        // chuyển list account thành list accountDTO
+//        List<AccountDTO> accountDTOS = new ArrayList<>();
+//        for (Account account : accounts) {
+//            // chuyển lần lượt account -> accountDTO
+//            AccountDTO dto = modelMapper.map(account, AccountDTO.class);// chuyển A  -> A'
+//            accountDTOS.add(dto);
+//        }
+        return accounts.stream().map(acc -> modelMapper.map(acc, AccountDTO.class)).toList();
     }
 
     @Override
@@ -47,7 +49,6 @@ public class AccountServiceImpl implements IAccountService {
         Account account = accountRepository.findById(id).orElse(null);
         AccountDTO dto = null;
         if (Objects.nonNull(account)) {
-            // chuyển lẻn từng account -> accountDTO
             dto = modelMapper.map(account, AccountDTO.class);
         }
         return dto;
@@ -59,39 +60,77 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public void create(Account account) {
-        // xử lý khóa ngoại: client gửi lên position chỉ có id -> phải tìm lại
-        // position đã tồn tại trong DB trước khi lưu, ko thì Hibernate sẽ
-        // hiểu nhầm là tạo mới 1 position (transient object)
-        if (Objects.nonNull(account.getPosition())) {
-            Position position = positionRepository.findById(account.getPosition().getId())
-                    .orElseThrow(() -> new RuntimeException("Position ID not found!"));
-            account.setPosition(position);
+    public void create(AccountCreateOrUpdateForm form) {
+//        // tìm department theo depId
+////        Department department = departmentRepository.findById(account.getDepartment().getId()).orElse(null);
+////        if (Objects.isNull(department)) {
+////            throw new RuntimeException("Department not found");
+////        }
+//        Department department = departmentRepository.findById(account.getDepartment().getId())
+//                .orElseThrow(() -> new RuntimeException("Department not found"));
+//
+//        // tìm position theo poID
+////        Position position = positionRepository.findById(account.getPosition().getId()).orElse(null);
+////        if (Objects.isNull(position)) {
+////            throw new RuntimeException("Position not found");
+////        }
+//        Position position = positionRepository.findById(account.getPosition().getId())
+//                .orElseThrow(() -> new RuntimeException("Position not found"));
+//
+//        if (accountRepository.existsByUsernameAndIdNot(account.getUsername(), null)) {
+//            throw new RuntimeException("Username exists");
+//        }
+//        if (accountRepository.existsByEmailAndIdNot(account.getEmail(), null)) {
+//            throw new RuntimeException("Email exists");
+//        }
+//        accountRepository.save(account);
+        // chuyển form -> account
+        // validation dữ liệu
+        if (accountRepository.existsByUsernameAndIdNot(form.getUsername(), null)) {
+            throw new RuntimeException("Username exists");
         }
+        if (accountRepository.existsByEmailAndIdNot(form.getEmail(), null)) {
+            throw new RuntimeException("Email exists");
+        }
+        Department department = departmentRepository.findById(form.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        Position position = positionRepository.findById(form.getPositionId())
+                .orElseThrow(() -> new RuntimeException("Position not found"));
+        // lưu
+        Account account = new Account();
+        account.setUsername(form.getUsername());
+        account.setFullName(form.getFullName());
+        account.setEmail(form.getEmail());
+        account.setDepartment(department);
+        account.setPosition(position);
+
         accountRepository.save(account);
     }
 
     @Override
-    public void update(Account account, Integer id) {
-        // tìm account cần update theo id
-        Account accountUpdate = accountRepository.findById(id).orElse(null);
-        Department department = departmentRepository.findById(account.getDepartment().getId()).orElse(null);
-        if (Objects.isNull(accountUpdate)) {
-            throw new RuntimeException("ID not found!");
-        } else {
-            // lưu lại thông tin update
-            accountUpdate.setUsername(account.getUsername());
-            accountUpdate.setPassword(account.getPassword());
-            accountUpdate.setEmail(account.getEmail());
-            accountUpdate.setFullName(account.getFullName());
+    public void update(AccountCreateOrUpdateForm form, Integer id) {
+        Account accountUpdate = accountRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-            // xử lý khóa ngoại khi update
-            if (Objects.nonNull(account.getPosition())) {
-                Position position = positionRepository.findById(account.getPosition().getId())
-                        .orElseThrow(() -> new RuntimeException("Position ID not found!"));
-                accountUpdate.setPosition(position);
-            }
-            accountRepository.save(accountUpdate);
+        /// validation dữ liệu
+        if (accountRepository.existsByUsernameAndIdNot(form.getUsername(), id)) {
+            throw new RuntimeException("Username exists");
         }
+        if (accountRepository.existsByEmailAndIdNot(form.getEmail(), id)) {
+            throw new RuntimeException("Email exists");
+        }
+        Department department = departmentRepository.findById(form.getDepartmentId())
+                .orElseThrow(() -> new RuntimeException("Department not found"));
+        Position position = positionRepository.findById(form.getPositionId())
+                .orElseThrow(() -> new RuntimeException("Position not found"));
+
+        // luu lại
+        accountUpdate.setUsername(form.getUsername());
+        accountUpdate.setEmail(form.getEmail());
+        accountUpdate.setFullName(form.getFullName());
+        accountUpdate.setDepartment(department);
+        accountUpdate.setPosition(position);
+
+        accountRepository.save(accountUpdate);
     }
 }

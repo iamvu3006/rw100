@@ -7,14 +7,13 @@ import java.util.List;
 
 public interface IAccountRepository extends JpaRepository<Account, Integer> {
     Account findByUsername(String username);
-    List<Account> findByFullName(String fullName);
-    List<Account> findAllByFullName(String fullName);
+    List<Account> findByFullName(String fullName);// select * from account where full_name = ?
+    List<Account> findAllByFullName(String fullName);// select * from account where full_name = ?
     boolean existsByUsername(String username);
-
     // select * from account where full_name = ? and username = ?
     List<Account> findByFullNameAndUsername(String fullName, String username);
     // select * from account where full_name = ? or username = ?
-    List<Account> findAllByFullNameOrUsername(String fullName, String username);
+    List<Account> findByFullNameOrUsername(String fullName, String username);
 
     boolean existsByUsernameAndIdNot(String username, Integer id);
     boolean existsByEmailAndIdNot(String email, Integer id);

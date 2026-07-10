@@ -9,10 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountCreateOrUpdateForm {
-    private String username;
-    private String fullName;
-    private String email;
-    private Integer departmentId;
-    private Integer positionId;
+public class DepartmentCreateOrUpdateForm {
+    private String name;
 }
