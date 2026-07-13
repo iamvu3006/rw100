@@ -1,40 +1,33 @@
 package com.vti.service.impl;
 
-import com.vti.dto.DepartmentDTO;
 import com.vti.entity.Department;
-import com.vti.form.DepartmentCreateOrUpdateForm;
 import com.vti.repository.IDepartmentRepository;
 import com.vti.service.IDepartmentService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class DepartmentServiceImpl implements IDepartmentService {
 
     @Autowired
-    private IDepartmentRepository departmentRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private IDepartmentRepository departmentRepository;// = new
 
     @Override
-    public List<DepartmentDTO> findAll() {
-        return departmentRepository.findAll().stream()
-                .map(department -> modelMapper.map(department, DepartmentDTO.class))
-                .toList();
+    public List<Department> findAll() {
+        List<Department> departments = departmentRepository.findAll();
+        return departments;
     }
 
     @Override
-    public DepartmentDTO findById(Integer id) {
-        Department department = departmentRepository.findById(id).orElse(null);
-        if (Objects.isNull(department)) {
-            return null;
-        }
-        return modelMapper.map(department, DepartmentDTO.class);
+    public Department findById(Integer id) {
+        Department department = departmentRepository.findById(id).get();
+        //orElse(null)   : nếu optional ko có gtrri thì sẽ gán luôn = gtri null
+        // DB   Ko có id 20,   coos tình tìm id = 20
+        return department;
     }
 
     @Override
@@ -43,36 +36,33 @@ public class DepartmentServiceImpl implements IDepartmentService {
     }
 
     @Override
-    public void create(DepartmentCreateOrUpdateForm department) {
-        if (departmentRepository.existsByNameAndIdNot(department.getName(), null)) {
+    public void create(Department department) {
+        // kiem tra xem ten đa tồn tại chưa
+        if (departmentRepository.existsByNameAndIdNot(department.getName(), null)) {//where name = ?
             throw new RuntimeException("Department already exists");
         }
-
-        Department newDepartment = new Department();
-        newDepartment.setName(department.getName());
-        departmentRepository.save(newDepartment);
+        departmentRepository.save(department);
     }
 
     @Override
-    public void update(DepartmentCreateOrUpdateForm department, Integer id) {
+    public void update(Department department, Integer id) {
+        //  tìm department can update theo id
         Department departmentUpdate = departmentRepository.findById(id).orElse(null);
         if (Objects.isNull(departmentUpdate)) {
             throw new RuntimeException("ID not found!");
-        }
-        if (departmentRepository.existsByNameAndIdNot(department.getName(), id)) {
-            throw new RuntimeException("Department already exists");
-        }
+        } else {
+            if (departmentRepository.existsByNameAndIdNot(department.getName(), id)) {// where name = ? and id !=
+                throw new RuntimeException("Department already exists");
+            }
 
-        departmentUpdate.setName(department.getName());
-        departmentRepository.save(departmentUpdate);
+            // lưu lại thông tin update
+            departmentUpdate.setName(department.getName());
+            departmentRepository.save(departmentUpdate);
+        }
     }
 
     @Override
-    public DepartmentDTO findByName(String name) {
-        Department department = departmentRepository.findByName(name);
-        if (Objects.isNull(department)) {
-            return null;
-        }
-        return modelMapper.map(department, DepartmentDTO.class);
+    public Department findByName(String name) {
+        return departmentRepository.findByName(name);
     }
 }

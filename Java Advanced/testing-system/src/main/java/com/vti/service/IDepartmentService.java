@@ -1,20 +1,19 @@
 package com.vti.service;
 
-import com.vti.dto.DepartmentDTO;
-import com.vti.form.DepartmentCreateOrUpdateForm;
+import com.vti.entity.Department;
 
 import java.util.List;
 
 public interface IDepartmentService {
-    List<DepartmentDTO> findAll();
+    List<Department> findAll();
 
-    DepartmentDTO findById(Integer id);
+    Department findById(Integer id);
 
     void deleteById(Integer id);
 
-    void create(DepartmentCreateOrUpdateForm department);
+    void create(Department department);
 
-    void update(DepartmentCreateOrUpdateForm department, Integer id);
+    void update(Department department, Integer id);
 
-    DepartmentDTO findByName(String name);
+    Department findByName(String name);
 }

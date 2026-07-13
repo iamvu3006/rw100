@@ -14,8 +14,11 @@ public class AccountDTO {
     private Integer id;
     private String username;
     private String fullName;
+    private String email;
     private String departmentName;//department   Name
     private String positionName;//position       Name
+    private Integer departmentId;
+    private Integer positionId;
     //.. 20 thuộc tính
 
 //    public AccountDTO(Account account) {

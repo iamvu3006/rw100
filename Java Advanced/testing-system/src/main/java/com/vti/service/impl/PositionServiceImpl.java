@@ -1,12 +1,9 @@
 package com.vti.service.impl;
 
-import com.vti.dto.PositionDTO;
 import com.vti.entity.Position;
-import com.vti.form.PositionCreateOrUpdateForm;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.IPositionRepository;
 import com.vti.service.IPositionService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,43 +19,36 @@ public class PositionServiceImpl implements IPositionService {
     @Autowired
     private IAccountRepository accountRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Override
-    public List<PositionDTO> findAll() {
-        return positionRepository.findAll().stream()
-                .map(position -> modelMapper.map(position, PositionDTO.class))
-                .toList();
+    public List<Position> findAll() {
+        return positionRepository.findAll();
     }
 
     @Override
-    public PositionDTO findById(Integer id) {
-        Position position = positionRepository.findById(id).orElse(null);
-        if (Objects.isNull(position)) {
-            return null;
-        }
-        return modelMapper.map(position, PositionDTO.class);
+    public Position findById(Integer id) {
+        return positionRepository.findById(id).orElse(null);
     }
 
     @Override
     public void deleteById(Integer id) {
+        // xoa acc co position_id = id lien quan
+
         positionRepository.deleteById(id);
     }
 
     @Override
-    public void create(PositionCreateOrUpdateForm position) {
-        Position newPosition = new Position();
-        newPosition.setName(position.getName());
-        positionRepository.save(newPosition);
+    public void create(Position account) {
+        positionRepository.save(account);
     }
 
     @Override
-    public void update(PositionCreateOrUpdateForm position, Integer id) {
+    public void update(Position position, Integer id) {
+        // tìm position theo id
         Position positionUpdate = positionRepository.findById(id).orElse(null);
-        if (Objects.isNull(positionUpdate)) {
+        if (Objects.isNull(position)) {
             throw new RuntimeException("Position Not Found");
         }
+        // luu vao DB
         positionUpdate.setName(position.getName());
         positionRepository.save(positionUpdate);
     }

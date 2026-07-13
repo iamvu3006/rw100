@@ -1,61 +1,63 @@
 package com.vti.controller;
 
-import com.vti.dto.DepartmentDTO;
-import com.vti.form.DepartmentCreateOrUpdateForm;
+import com.vti.entity.Department;
 import com.vti.service.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/departments")
+@CrossOrigin(origins = "*") //http://127.0.0.1:5500
 public class DepartmentController {
 
     @Autowired
-    private IDepartmentService departmentService;
+    private IDepartmentService departmentService;// = new ();
 
+    // lấy ra ds department
     @GetMapping
-    public ResponseEntity<List<DepartmentDTO>> findAll() {
-        return new ResponseEntity<>(departmentService.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Department>> findAll() {
+        List<Department> departments = departmentService.findAll();
+        return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
-    @GetMapping("/{idSearch}")
-    public ResponseEntity<DepartmentDTO> findById(@PathVariable(name = "idSearch") Integer id) {
-        return new ResponseEntity<>(departmentService.findById(id), HttpStatus.OK);
+    //lay ra thong tin department theo id  - khóa chính
+    @GetMapping("/{idSearch}")// http://localhost:8080/api/v1/departments/13
+    public ResponseEntity<Department> findById(@PathVariable(name = "idSearch") Integer id) {
+        Department department = departmentService.findById(id);
+        return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<DepartmentDTO> findByName(@RequestParam(name = "name") String name) {
-        return new ResponseEntity<>(departmentService.findByName(name), HttpStatus.OK);
+    // tìm kiếm theo departmentName
+    @GetMapping("/search")// http://localhost:8080/api/v1/departments/search?name=Sale&description=abc
+    public ResponseEntity<Department> findByName(@RequestParam(name = "name") String name) {
+        Department department = departmentService.findByName(name);
+        return new ResponseEntity<>(department, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{idDelete}")
+    // xóa theo id
+    @DeleteMapping("/{idDelete}")// http://localhost:8080/api/v1/departments/13
     public ResponseEntity<String> deleteById(@PathVariable(name = "idDelete") Integer id) {
         departmentService.deleteById(id);
         return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
     }
 
+    // tao moi 1 department
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody DepartmentCreateOrUpdateForm form) {
-        departmentService.create(form);
+    public ResponseEntity<String> create(@RequestBody Department department) {
+        departmentService.create(department);
         return new ResponseEntity<>("Tạo mới thành công", HttpStatus.CREATED);
     }
 
+    // update theo id
     @PutMapping("/{idUpdate}")
-    public ResponseEntity<String> update(@RequestBody DepartmentCreateOrUpdateForm form,
+    public ResponseEntity<String> update(@RequestBody Department department,
                                          @PathVariable(name = "idUpdate") Integer id) {
-        departmentService.update(form, id);
+        departmentService.update(department, id);
         return new ResponseEntity<>("Update thành công", HttpStatus.OK);
     }
 }

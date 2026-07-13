@@ -1,18 +1,17 @@
 package com.vti.service;
 
-import com.vti.dto.PositionDTO;
-import com.vti.form.PositionCreateOrUpdateForm;
+import com.vti.entity.Position;
 
 import java.util.List;
 
 public interface IPositionService {
-    List<PositionDTO> findAll();
+    List<Position> findAll();
 
-    PositionDTO findById(Integer id);
+    Position findById(Integer id);
 
     void deleteById(Integer id);
 
-    void create(PositionCreateOrUpdateForm position);
+    void create(Position account);
 
-    void update(PositionCreateOrUpdateForm position, Integer id);
+    void update(Position account, Integer id);
 }
