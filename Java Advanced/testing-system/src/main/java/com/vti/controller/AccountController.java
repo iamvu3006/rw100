@@ -4,6 +4,8 @@ import com.vti.dto.AccountDTO;
 import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.form.AccountSearchForm;
 import com.vti.service.IAccountService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/accounts")
 @CrossOrigin("*")//http://127.0.0.1:5500/
@@ -28,8 +28,8 @@ public class AccountController {
     private IAccountService accountService;
 
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> findAll(AccountSearchForm form) {
-        return new ResponseEntity<>(accountService.findAll(form), HttpStatus.OK);
+    public ResponseEntity<Page<AccountDTO>> findAll(AccountSearchForm form, Pageable pageable) {
+        return new ResponseEntity<>(accountService.findAll(form, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

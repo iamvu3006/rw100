@@ -18,6 +18,8 @@ import com.vti.specification.AccountCustomSpecification;
 import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,7 @@ public class AccountServiceImpl implements IAccountService {
     private IPositionRepository positionRepository;
 
     @Override
-    public List<AccountDTO> findAll(AccountSearchForm form) {
+    public Page<AccountDTO> findAll(AccountSearchForm form,  Pageable pageable) {
         Specification<Account> where = Specification.unrestricted();// where 1=1
         if (StringUtils.isNotEmpty(form.getEmail())) {// form.getEmail() != null && !form.getEmail().isEmpty()
             AccountCustomSpecification searchEmail = new AccountCustomSpecification("email", form.getEmail());
@@ -66,9 +68,10 @@ public class AccountServiceImpl implements IAccountService {
             AccountCustomSpecification searchPosition = new AccountCustomSpecification("positionId", form.getPositionId());
             where = where.and(searchPosition);// where positionId = ?
         }
-        List<Account> accounts = accountRepository.findAll(where);//select * from account
-
-        return accounts.stream().map(acc -> modelMapper.map(acc, AccountDTO.class)).toList();
+        Page<Account> accountPage = accountRepository.findAll(where, pageable);//select * from account
+        // chuyển page<account> thành Page<DTO>
+        Page<AccountDTO> accountDTOPage = accountPage.map(account -> modelMapper.map(account, AccountDTO.class));
+        return accountDTOPage;
     }
 
     @Override
