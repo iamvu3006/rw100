@@ -2,10 +2,11 @@ package com.vti.repository;
 
 import com.vti.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface IAccountRepository extends JpaRepository<Account, Integer> {
+public interface IAccountRepository extends JpaRepository<Account, Integer>, JpaSpecificationExecutor<Account> {
     Account findByUsername(String username);
     List<Account> findByFullName(String fullName);// select * from account where full_name = ?
     List<Account> findAllByFullName(String fullName);// select * from account where full_name = ?

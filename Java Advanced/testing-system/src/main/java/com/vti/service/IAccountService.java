@@ -2,11 +2,12 @@ package com.vti.service;
 
 import com.vti.dto.AccountDTO;
 import com.vti.form.AccountCreateOrUpdateForm;
+import com.vti.form.AccountSearchForm;
 
 import java.util.List;
 
 public interface IAccountService {
-    List<AccountDTO> findAll();
+    List<AccountDTO> findAll(AccountSearchForm form);
 
     AccountDTO findById(Integer id);
 

@@ -4,13 +4,21 @@ import com.vti.dto.AccountDTO;
 import com.vti.entity.Account;
 import com.vti.entity.Department;
 import com.vti.entity.Position;
+
 import com.vti.form.AccountCreateOrUpdateForm;
+import com.vti.form.AccountSearchForm;
+
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.IDepartmentRepository;
 import com.vti.repository.IPositionRepository;
+
 import com.vti.service.IAccountService;
+
+import com.vti.specification.AccountCustomSpecification;
+import io.micrometer.common.util.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,15 +40,34 @@ public class AccountServiceImpl implements IAccountService {
     private IPositionRepository positionRepository;
 
     @Override
-    public List<AccountDTO> findAll() {
-        List<Account> accounts = accountRepository.findAll();
-//        // chuyển list account thành list accountDTO
-//        List<AccountDTO> accountDTOS = new ArrayList<>();
-//        for (Account account : accounts) {
-//            // chuyển lần lượt account -> accountDTO
-//            AccountDTO dto = modelMapper.map(account, AccountDTO.class);// chuyển A  -> A'
-//            accountDTOS.add(dto);
-//        }
+    public List<AccountDTO> findAll(AccountSearchForm form) {
+        Specification<Account> where = Specification.unrestricted();// where 1=1
+        if (StringUtils.isNotEmpty(form.getEmail())) {// form.getEmail() != null && !form.getEmail().isEmpty()
+            AccountCustomSpecification searchEmail = new AccountCustomSpecification("email", form.getEmail());
+            where = where.and(searchEmail);// where email like ?
+        }
+
+        if (StringUtils.isNotEmpty(form.getUsername())) {
+            AccountCustomSpecification searchUsername = new AccountCustomSpecification("username", form.getUsername());
+            where = where.and(searchUsername);// where username like ?
+        }
+
+        if (StringUtils.isNotEmpty(form.getFullName())) {
+            AccountCustomSpecification searchFullName = new AccountCustomSpecification("fullName", form.getFullName());
+            where = where.and(searchFullName);// where fullName like ?
+        }
+
+        if (Objects.nonNull(form.getDepartmentId())) {
+            AccountCustomSpecification searchDepartment = new AccountCustomSpecification("departmentId", form.getDepartmentId());
+            where = where.and(searchDepartment);// where departmentId = ?
+        }
+
+        if (Objects.nonNull(form.getPositionId())) {
+            AccountCustomSpecification searchPosition = new AccountCustomSpecification("positionId", form.getPositionId());
+            where = where.and(searchPosition);// where positionId = ?
+        }
+        List<Account> accounts = accountRepository.findAll(where);//select * from account
+
         return accounts.stream().map(acc -> modelMapper.map(acc, AccountDTO.class)).toList();
     }
 
