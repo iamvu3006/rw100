@@ -5,9 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
 
-        <!-- bs3-cdn: import thư viện jquery và bootstrap -->
-
-        <!-- Latest compiled and minified CSS & JS -->
         <link
             rel="stylesheet"
             media="screen"
@@ -158,8 +155,6 @@
         </style>
     </head>
     <body>
-        <!-- bs3-container: bo chiều rộng của giao diện lại -->
-
         <div class="container">
             <button
                 type="button"
@@ -178,11 +173,8 @@
             <div class="form-group">
                 <legend>Quản lý account</legend>
             </div>
-            <!-- các ô tìm kiếm -->
             <div>
-                <!-- bs3-col:5 -->
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                    <!-- bs3-input:text:h -->
                     <div class="form-group">
                         <label
                             for="usernameSearch"
@@ -203,7 +195,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- bs3-col:5 -->
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                     <div class="form-group">
                         <label for="emailSearch" class="col-sm-4 control-label"
@@ -223,12 +214,14 @@
                         </div>
                     </div>
                 </div>
-                <!-- bs3-col:2 -->
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                     <button
                         type="button"
                         class="btn btn-default"
-                        onclick="loadData()"
+                        onclick="
+                            pageNumber = 0;
+                            loadData();
+                        "
                     >
                         Tìm kiếm
                     </button>
@@ -258,7 +251,6 @@
                     </div>
                 </div>
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                    <!-- bs3-select:h -->
                     <div class="form-group">
                         <label
                             for="deparmentSearchID"
@@ -311,7 +303,25 @@
                 </div>
             </div>
 
-            <!-- bs3-table:.... -->
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group" style="align-items: right">
+                    <label for="numberOfRecordId" class="col-sm-2 control-label"
+                        >Số dòng hiển thị</label
+                    >
+                    <div class="col-sm-1">
+                        <select
+                            name=""
+                            id="numberOfRecordId"
+                            class="form-control"
+                        >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             <table class="table table-hover">
                 <thead>
@@ -326,69 +336,27 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="tableBoby">
-                    <!-- <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
-                        </td>
-                        <td>nguyenvana</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>20</td>
-                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
-                        </td>
-                        <td>nguyenvana</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>20</td>
-                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
-                        </td>
-                        <td>nguyenvana</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>20</td>
-                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
-                        </td>
-                        <td>nguyenvana</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>20</td>
-                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
-                    </tr> -->
-                </tbody>
+                <tbody id="tableBoby"></tbody>
             </table>
 
-            <!-- <div
+            <ul
+                id="pagingId"
+                class="pagination pagination-lg"
                 style="
                     align-items: center;
                     display: flex;
                     justify-content: center;
                 "
             >
-                <ul class="pagination pagination-lg">
-                    <li><a href="#">&laquo;</a></li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
-            </div> -->
+                <li><a href="#">&laquo;</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
 
-            <!-- bs3-modal -->
             <div class="modal fade" id="modal-id">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -410,12 +378,9 @@
                                 class="form-horizontal"
                                 role="form"
                             >
-                                <!-- bs3-col:8 : để chứa các ô input -->
-                                <!-- bs3-col:4 : để chứa các button -->
                                 <div
                                     class="col-xs-8 col-sm-8 col-md-8 col-lg-8"
                                 >
-                                    <!-- bs3-input:text:h -->
                                     <div class="form-group">
                                         <label
                                             for="inputAvatar"
@@ -433,7 +398,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- bs3-input:text:h -->
                                     <div class="form-group">
                                         <label
                                             for="inputUsername"
@@ -488,26 +452,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- <div class="form-group">
-                                        <div class="form-group">
-                                            <label
-                                                for="inputAge"
-                                                class="col-sm-2 control-label"
-                                                >DepartmentName:</label
-                                            >
-                                            <div class="col-sm-10">
-                                                <input
-                                                    type="text"
-                                                    name=""
-                                                    id="inputAge"
-                                                    class="form-control"
-                                                    required
-                                                />
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <!-- bs3-select:h -->
-
                                     <div class="form-group">
                                         <label
                                             for="inputDepartmentName"
@@ -520,13 +464,7 @@
                                                 id="inputDepartmentName"
                                                 class="form-control"
                                                 required="required"
-                                            >
-                                                <!-- <option value="">Bảo vệ</option>
-                                                <option value="">Sale</option>
-                                                <option value="">
-                                                    Marketing
-                                                </option> -->
-                                            </select>
+                                            ></select>
                                         </div>
                                     </div>
 
@@ -542,14 +480,7 @@
                                                 id="inputPositionName"
                                                 class="form-control"
                                                 required="required"
-                                            >
-                                                <!-- <option value="">DEV</option>
-                                                <option value="">TEST</option>
-                                                <option value="">PM</option>
-                                                <option value="">
-                                                    SCRUM_MASTER
-                                                </option> -->
-                                            </select>
+                                            ></select>
                                         </div>
                                     </div>
                                 </div>
