@@ -6,10 +6,12 @@ import com.vti.form.AccountSearchForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.security.Principal;
 import java.util.List;
 
-public interface IAccountService {
+public interface IAccountService extends UserDetailsService {
     Page<AccountDTO> findAll(AccountSearchForm form, Pageable pageable);
 
     AccountDTO findById(Integer id);
@@ -21,4 +23,6 @@ public interface IAccountService {
     void update(AccountCreateOrUpdateForm account, Integer id);
 
     AccountDTO findByUsername(String username);
+
+    AccountDTO login(Principal principal);
 }

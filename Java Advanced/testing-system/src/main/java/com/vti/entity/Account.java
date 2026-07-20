@@ -1,13 +1,7 @@
 package com.vti.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.vti.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,4 +43,11 @@ public class Account {
 
     @Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDate;
+
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 }
