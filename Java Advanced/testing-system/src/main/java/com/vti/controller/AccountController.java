@@ -4,24 +4,21 @@ import com.vti.dto.AccountDTO;
 import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.form.AccountSearchForm;
 import com.vti.service.IAccountService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
 @CrossOrigin("*")//http://127.0.0.1:5500/
+@Validated
 public class AccountController {
 
     @Autowired
@@ -44,7 +41,7 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody AccountCreateOrUpdateForm form) {
+    public ResponseEntity<String> create(@RequestBody @Valid AccountCreateOrUpdateForm form) {
         accountService.create(form);
         return new ResponseEntity<>("Created", HttpStatus.OK);
     }
@@ -53,5 +50,12 @@ public class AccountController {
     public ResponseEntity<String> update(@RequestBody AccountCreateOrUpdateForm form, @PathVariable(name = "id") Integer id) {
         accountService.update(form, id);
         return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
+
+
+    @GetMapping("/findByUsername")
+    public ResponseEntity<AccountDTO> findByUsername(@RequestParam String username) {
+
+        return new ResponseEntity<>(accountService.findByUsername(username), HttpStatus.OK);
     }
 }

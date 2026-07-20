@@ -1,7 +1,11 @@
 package com.vti.exception;
 
-public class BusinessException extends RuntimeException {
-  public BusinessException(String message) {
-    super(message);
-  }
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
+public class BusinessException extends RuntimeException{
+    private Integer status;
+    private String message;
 }

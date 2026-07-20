@@ -5,6 +5,7 @@ import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.form.AccountSearchForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface IAccountService {
     void create(AccountCreateOrUpdateForm account);
 
     void update(AccountCreateOrUpdateForm account, Integer id);
+
+    AccountDTO findByUsername(String username);
 }
