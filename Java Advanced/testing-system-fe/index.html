@@ -5,15 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
 
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
+        <!-- bs3-cdn: import thư viện jquery và bootstrap -->
+
+        <!-- Latest compiled and minified CSS & JS -->
+        <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <style>
@@ -155,115 +151,56 @@
         </style>
     </head>
     <body>
+        <!-- bs3-container: bo chiều rộng của giao diện lại -->
+
         <div class="container">
-            <button
-                type="button"
-                class="btn btn-default"
-                onclick="changeTheme('light')"
-            >
-                Light
-            </button>
-            <button
-                type="button"
-                class="btn btn-default"
-                onclick="changeTheme('dark')"
-            >
-                Dark
-            </button>
+            <button type="button" class="btn btn-default" onclick="changeTheme('light')">Light</button>
+            <button type="button" class="btn btn-default" onclick="changeTheme('dark')">Dark</button>
             <div class="form-group">
                 <legend>Quản lý account</legend>
             </div>
+            <!-- các ô tìm kiếm -->
             <div>
+                <!-- bs3-col:5 -->
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <!-- bs3-input:text:h -->
                     <div class="form-group">
-                        <label
-                            for="usernameSearch"
-                            class="col-sm-4 control-label"
-                            >Username:</label
-                        >
+                        <label for="usernameSearch" class="col-sm-4 control-label">Username:</label>
                         <div class="col-sm-8">
-                            <input
-                                type="text"
-                                name="Username"
-                                id="usernameSearch"
-                                class="form-control"
-                                value=""
-                                required="required"
-                                pattern=""
-                                title=""
-                            />
+                            <input type="text" name="Username" id="usernameSearch" class="form-control" value="" required="required" pattern="" title="" />
                         </div>
                     </div>
                 </div>
+                <!-- bs3-col:5 -->
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                     <div class="form-group">
-                        <label for="emailSearch" class="col-sm-4 control-label"
-                            >Email:</label
-                        >
+                        <label for="emailSearch" class="col-sm-4 control-label">Email:</label>
                         <div class="col-sm-8">
-                            <input
-                                type="text"
-                                name="Email"
-                                id="emailSearch"
-                                class="form-control"
-                                value=""
-                                required="required"
-                                pattern=""
-                                title=""
-                            />
+                            <input type="text" name="Email" id="emailSearch" class="form-control" value="" required="required" pattern="" title="" />
                         </div>
                     </div>
                 </div>
+                <!-- bs3-col:2 -->
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <button
-                        type="button"
-                        class="btn btn-default"
-                        onclick="
-                            pageNumber = 0;
-                            loadData();
-                        "
-                    >
-                        Tìm kiếm
-                    </button>
+                    <button type="button" class="btn btn-default" onclick="loadData()">Tìm kiếm</button>
                 </div>
             </div>
 
             <div>
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                     <div class="form-group">
-                        <label
-                            for="fullNameSearch"
-                            class="col-sm-4 control-label"
-                            >Fullname:</label
-                        >
+                        <label for="fullNameSearch" class="col-sm-4 control-label">Fullname:</label>
                         <div class="col-sm-8">
-                            <input
-                                type="text"
-                                name="Fullname"
-                                id="fullNameSearch"
-                                class="form-control"
-                                value=""
-                                required="required"
-                                pattern=""
-                                title=""
-                            />
+                            <input type="text" name="Fullname" id="fullNameSearch" class="form-control" value="" required="required" pattern="" title="" />
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                    <!-- bs3-select:h -->
                     <div class="form-group">
-                        <label
-                            for="deparmentSearchID"
-                            class="col-sm-4 control-label"
-                            >DepartmentName:</label
-                        >
+                        <label for="deparmentSearchID" class="col-sm-4 control-label">DepartmentName:</label>
                         <div class="col-sm-8">
-                            <select
-                                name="DepartmentName"
-                                id="deparmentSearchID"
-                                class="form-control"
-                                required="required"
-                            >
+                            <select name="DepartmentName" id="deparmentSearchID" class="form-control" required="required">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -271,57 +208,40 @@
                 </div>
 
                 <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    <a
-                        class="btn btn-primary"
-                        data-toggle="modal"
-                        href="#modal-id"
-                        onclick="resetForm()"
-                        >Create</a
-                    >
+                    <a class="btn btn-primary" data-toggle="modal" href="#modal-id" onclick="resetForm()">Create</a>
                 </div>
             </div>
 
             <div>
                 <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                     <div class="form-group">
-                        <label
-                            for="positionSearchID"
-                            class="col-sm-4 control-label"
-                            >PositionName:</label
-                        >
+                        <label for="positionSearchID" class="col-sm-4 control-label">PositionName:</label>
                         <div class="col-sm-8">
-                            <select
-                                name="PositionName"
-                                id="positionSearchID"
-                                class="form-control"
-                                required="required"
-                            >
+                            <select name="PositionName" id="positionSearchID" class="form-control" required="required">
                                 <option value=""></option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="form-group" style="align-items: right">
-                    <label for="numberOfRecordId" class="col-sm-2 control-label"
-                        >Số dòng hiển thị</label
-                    >
-                    <div class="col-sm-1">
-                        <select
-                            name=""
-                            id="numberOfRecordId"
-                            class="form-control"
-                        >
-                            <option value="5">5</option>
-                            <option value="10">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                        </select>
+            <div>
+                <!-- bs3-col:12 -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <!-- bs3-select:h -->
+                    <div class="form-group" style="align-items: right; display: flex; justify-content: right">
+                        <label for="numberOfRecordId" class="col-sm-2 control-label">Số bản ghi/trang:</label>
+                        <div class="col-sm-1">
+                            <select name="" id="numberOfRecordId" class="form-control" required="required" onchange="changeSize()">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- bs3-table:.... -->
 
             <table class="table table-hover">
                 <thead>
@@ -336,108 +256,101 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="tableBoby"></tbody>
+                <tbody id="tableBoby">
+                    <!-- <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
+                        </td>
+                        <td>nguyenvana</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>20</td>
+                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
+                        </td>
+                        <td>nguyenvana</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>20</td>
+                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
+                        </td>
+                        <td>nguyenvana</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>20</td>
+                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <img src="https://avatars.githubusercontent.com/u/3143871" style="height: 50px" alt="" />
+                        </td>
+                        <td>nguyenvana</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>20</td>
+                        <td><button onclick="onHandleUpdate(1)">Edit</button> <button onclick="onDelete(1)">Delete</button></td>
+                    </tr> -->
+                </tbody>
             </table>
 
-            <ul
-                id="pagingId"
-                class="pagination pagination-lg"
-                style="
-                    align-items: center;
-                    display: flex;
-                    justify-content: center;
-                "
-            >
-                <li><a href="#">&laquo;</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
+            <!-- bs3-pagination:lg -->
+            <ul id="pagingId" class="pagination pagination-lg" style="align-items: center; display: flex; justify-content: center">
+                <!-- <li><a href="#">&laquo;</a></li>
+                <li><a href="#" onclick="loadData()">1</a></li>
+                <li><a href="#" class="active">2</a></li>
                 <li><a href="#">3</a></li>
                 <li><a href="#">4</a></li>
                 <li><a href="#">5</a></li>
-                <li><a href="#">&raquo;</a></li>
+                <li><a href="#">&raquo;</a></li> -->
             </ul>
 
+            <!-- bs3-modal -->
             <div class="modal fade" id="modal-id">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-hidden="true"
-                            >
-                                &times;
-                            </button>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title"></h4>
                         </div>
                         <div class="modal-body" style="padding: 0px">
-                            <form
-                                id="accountForm"
-                                action=""
-                                class="form-horizontal"
-                                role="form"
-                            >
-                                <div
-                                    class="col-xs-8 col-sm-8 col-md-8 col-lg-8"
-                                >
+                            <form id="accountForm" action="" class="form-horizontal" role="form">
+                                <!-- bs3-col:8 : để chứa các ô input -->
+                                <!-- bs3-col:4 : để chứa các button -->
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <!-- bs3-input:text:h -->
                                     <div class="form-group">
-                                        <label
-                                            for="inputAvatar"
-                                            class="col-sm-4 control-label"
-                                            >Avatar:</label
-                                        >
+                                        <label for="inputAvatar" class="col-sm-4 control-label">Avatar:</label>
                                         <div class="col-sm-8">
-                                            <input
-                                                type="text"
-                                                name="Avatar"
-                                                id="inputAvatar"
-                                                class="form-control"
-                                                value=""
-                                            />
+                                            <input type="text" name="Avatar" id="inputAvatar" class="form-control" value="" />
+                                        </div>
+                                    </div>
+
+                                    <!-- bs3-input:text:h -->
+                                    <div class="form-group">
+                                        <label for="inputUsername" class="col-sm-4 control-label">Username:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" name="Username" id="inputUsername" class="form-control" required />
+                                            <small class="text-danger" id="usernameDangerId"></small>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label
-                                            for="inputUsername"
-                                            class="col-sm-4 control-label"
-                                            >Username:</label
-                                        >
+                                        <label for="inputFullname" class="col-sm-4 control-label">Fullname:</label>
                                         <div class="col-sm-8">
-                                            <input
-                                                type="text"
-                                                name="Username"
-                                                id="inputUsername"
-                                                class="form-control"
-                                                required
-                                            />
+                                            <input type="text" name="Fullname" id="inputFullname" class="form-control" required />
+                                            <small class="text-danger" id="fullNameDangerId"></small>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label
-                                            for="inputFullname"
-                                            class="col-sm-4 control-label"
-                                            >Fullname:</label
-                                        >
-                                        <div class="col-sm-8">
-                                            <input
-                                                type="text"
-                                                name="Fullname"
-                                                id="inputFullname"
-                                                class="form-control"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label
-                                            for="inputEmail"
-                                            class="col-sm-4 control-label"
-                                            >Email:</label
-                                        >
+                                        <label for="inputEmail" class="col-sm-4 control-label">Email:</label>
                                         <div class="col-sm-8">
                                             <input
                                                 type="text"
@@ -449,58 +362,44 @@
                                                 pattern=""
                                                 title=""
                                             />
+                                            <small class="text-danger" id="emailDangerId"></small>
+                                        </div>
+                                    </div>
+
+                                    <!-- bs3-select:h -->
+
+                                    <div class="form-group">
+                                        <label for="inputDepartmentName" class="col-sm-5 control-label">DepartmentName:</label>
+                                        <div class="col-sm-7">
+                                            <select name="DepartmentName" id="inputDepartmentName" class="form-control" required="required">
+                                                <!-- <option value="">Bảo vệ</option>
+                                                <option value="">Sale</option>
+                                                <option value="">
+                                                    Marketing
+                                                </option> -->
+                                            </select>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label
-                                            for="inputDepartmentName"
-                                            class="col-sm-5 control-label"
-                                            >DepartmentName:</label
-                                        >
+                                        <label for="inputPositionName" class="col-sm-5 control-label">PositionName:</label>
                                         <div class="col-sm-7">
-                                            <select
-                                                name="DepartmentName"
-                                                id="inputDepartmentName"
-                                                class="form-control"
-                                                required="required"
-                                            ></select>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label
-                                            for="inputPositionName"
-                                            class="col-sm-5 control-label"
-                                            >PositionName:</label
-                                        >
-                                        <div class="col-sm-7">
-                                            <select
-                                                name="PositionName"
-                                                id="inputPositionName"
-                                                class="form-control"
-                                                required="required"
-                                            ></select>
+                                            <select name="PositionName" id="inputPositionName" class="form-control" required="required">
+                                                <!-- <option value="">DEV</option>
+                                                <option value="">TEST</option>
+                                                <option value="">PM</option>
+                                                <option value="">
+                                                    SCRUM_MASTER
+                                                </option> -->
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-primary"
-                                id="submit"
-                            >
-                                Save
-                            </button>
-                            <button
-                                type="button"
-                                class="btn btn-default"
-                                data-dismiss="modal"
-                            >
-                                Close
-                            </button>
+                            <button type="button" class="btn btn-primary" id="submit">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
