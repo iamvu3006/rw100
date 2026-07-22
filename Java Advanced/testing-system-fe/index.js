@@ -7,7 +7,6 @@ var baseUrlPosition = "http://localhost:8080/api/v1/positions";
 var baseAvt =
     "https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg";
 var pageNumber = 0;
-
 var emailRules = {
     name: "Email",
     required: true,
@@ -159,13 +158,11 @@ function onDelete(idDelete) {
 }
 
 function onCreate() {
-    if (!validationField("usernameDangerId", "inputUsername", usernameRules)) {
-        return;
-    }
-    if (!validationField("fullNameDangerId", "inputFullname", fullNameRules)) {
-        return;
-    }
-    if (!validationField("emailDangerId", "inputEmail", emailRules)) {
+    if (
+        !validationField("usernameDangerId", "inputUsername", usernameRules) ||
+        !validationField("fullNameDangerId", "inputFullname", fullnameRules) ||
+        !validationField("emailDangerId", "inputEmail", emailRules)
+    ) {
         return;
     } else {
         if (v_idUpdate > 0) {
@@ -200,11 +197,7 @@ function onCreate() {
                 loadData();
                 // clear dữ lieu 3 ô username, fullName, age ở tren
                 //jqValSet
-                $("#inputAvatar").val("");
-                $("#inputUsername").val("");
-                $("#inputFullname").val("");
-                $("#inputEmail").val("");
-                $("#modal-id").modal("hide");
+                hideAndResetModal();
             },
             error: function (error) {
                 alert(error.responseJSON.message);
@@ -212,12 +205,6 @@ function onCreate() {
         });
     }
 }
-
-// jqSubmit
-// $("#accountForm").submit(function (e) {
-//     e.preventDefault();
-
-// });
 
 $("#submit").click(function (e) {
     // nếu v_idUpdate <= 0    thì sẽ tạo mới
@@ -267,42 +254,46 @@ function onHandleEdit(idUpdate) {
 }
 
 function onUpdate(idDelete) {
-    var v_avatar = $("#inputAvatar").val();
-    var v_username = $("#inputUsername").val();
-    var v_fullName = $("#inputFullname").val();
-    var v_email = $("#inputEmail").val();
-    var v_departmentID = $("#inputDepartmentName").val();
-    var v_positionID = $("#inputPositionName").val();
-    // lay ra doi tuong can update
-    var accountUpdate = {
-        username: v_username,
-        fullName: v_fullName,
-        email: v_email,
-        departmentId: v_departmentID,
-        positionId: v_positionID,
-    };
-    // call api update
-    $.ajax({
-        type: "PUT",
-        url: baseUrl + "/" + v_idUpdate,
-        data: JSON.stringify(accountUpdate),
-        contentType: "application/json",
-        success: function (response) {
-            alert("Update dữ liệu thành công");
-            // hiển thi ls account
-            loadData();
-            //jqValSet
-            v_idUpdate = -1;
-            $("#inputAvatar").val("");
-            $("#inputUsername").val("");
-            $("#inputFullname").val("");
-            $("#inputAge").val("");
-            $("#modal-id").modal("hide");
-        },
-        error: function (error) {
-            alert("Call api update thất bại");
-        },
-    });
+    if (
+        !validationField("usernameDangerId", "inputUsername", usernameRules) ||
+        !validationField("fullNameDangerId", "inputFullname", fullnameRules) ||
+        !validationField("emailDangerId", "inputEmail", emailRules)
+    ) {
+        return;
+    } else {
+        var v_avatar = $("#inputAvatar").val();
+        var v_username = $("#inputUsername").val();
+        var v_fullName = $("#inputFullname").val();
+        var v_email = $("#inputEmail").val();
+        var v_departmentID = $("#inputDepartmentName").val();
+        var v_positionID = $("#inputPositionName").val();
+        // lay ra doi tuong can update
+        var accountUpdate = {
+            username: v_username,
+            fullName: v_fullName,
+            email: v_email,
+            departmentId: v_departmentID,
+            positionId: v_positionID,
+        };
+        // call api update
+        $.ajax({
+            type: "PUT",
+            url: baseUrl + "/" + v_idUpdate,
+            data: JSON.stringify(accountUpdate),
+            contentType: "application/json",
+            success: function (response) {
+                alert("Update dữ liệu thành công");
+                // hiển thi ls account
+                loadData();
+                //jqValSet
+                v_idUpdate = -1;
+                hideAndResetModal();
+            },
+            error: function (error) {
+                alert(error.responseJSON.message);
+            },
+        });
+    }
 }
 
 function loadDepartment() {
@@ -356,58 +347,6 @@ function loadPosition() {
     });
 }
 
-function validationUsername() {
-    $("#usernameDangerId").empty();
-    var v_username = $("#inputUsername").val();
-    if (v_username.trim() == "") {
-        $("#usernameDangerId").append("Username không được để trống");
-        return false;
-    }
-    if (v_username.length > 100) {
-        $("#usernameDangerId").append("Username không dài quá 100 kí tự");
-        return false;
-    }
-
-    return true;
-}
-
-function validationFullname() {
-    $("#fullNameDangerId").empty();
-    var v_fullname = $("#inputFullname").val();
-    if (v_fullname.trim() == "") {
-        $("#fullNameDangerId").append("Fullname không được để trống");
-        return false;
-    }
-    if (v_fullname.length > 100) {
-        $("#fullNameDangerId").append("Fullname không dài quá 100 kí tự");
-        return false;
-    }
-
-    return true;
-}
-
-function validationEmail() {
-    $("#emailDangerId").empty();
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    var v_email = $("#inputEmail").val();
-    if (v_email.trim() == "") {
-        $("#emailDangerId").append("Email không được để trống");
-        return false;
-    }
-
-    if (!regex.test(v_email)) {
-        $("#emailDangerId").append("Email không đúng định dạng");
-        return false;
-    }
-
-    if (v_email.length > 100) {
-        $("#emailDangerId").append("Email không dài quá 100 kí tự");
-        return false;
-    }
-
-    return true;
-}
-
 function validationField(errorId, inputId, rules) {
     // clear ô show lỗi
     $(`#${errorId}`).empty();
@@ -417,12 +356,14 @@ function validationField(errorId, inputId, rules) {
         $(`#${errorId}`).append(`${rules.name} không được để trống`);
         return false;
     }
+
     if (rules.length && inputValue.length > rules.length) {
         $(`#${errorId}`).append(
             `${rules.name} không dài quá ${rules.length} kí tự`,
         );
         return false;
     }
+
     if (rules.pattern && !rules.pattern.test(inputValue)) {
         $(`#${errorId}`).append(`${rules.name} không đúng định dạng`);
         return false;
@@ -435,9 +376,9 @@ function hideAndResetModal() {
     $("#inputUsername").val("");
     $("#inputFullname").val("");
     $("#inputEmail").val("");
-    $("#usernameDangerId").empty();
-    $("#fullNameDangerId").empty();
     $("#emailDangerId").empty();
+    $("#fullNameDangerId").empty();
+    $("#usernameDangerId").empty();
     $("#modal-id").modal("hide");
 }
 
