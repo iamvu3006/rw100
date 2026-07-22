@@ -44,7 +44,7 @@ public class Account {
     @Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDate;
 
-    @Column(name = "password", nullable = false, length = 100)
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)

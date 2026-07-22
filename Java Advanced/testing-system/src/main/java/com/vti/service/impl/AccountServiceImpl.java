@@ -22,7 +22,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class AccountServiceImpl implements IAccountService{
+public class AccountServiceImpl implements IAccountService {
 
     @Autowired
     private IAccountRepository accountRepository;
@@ -153,19 +152,19 @@ public class AccountServiceImpl implements IAccountService{
         return modelMapper.map(account, AccountDTO.class);
     }
 
-    //hàm login
     @Override
-    public AccountDTO login(Principal principal){
+    public AccountDTO login(Principal principal) {
         String username = principal.getName();
         Account account = accountRepository.findByUsername(username);
         return modelMapper.map(account, AccountDTO.class);
     }
 
+    // load ra các thông tin của User(username, password, role)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepository.findByUsername(username);
         if (Objects.isNull(account)) {
-            throw BusinessException.builder().message("Account by username not found").build();
+            throw BusinessException.builder().message("Username not found").build();
         }
         return new User(username, account.getPassword(),
                 AuthorityUtils.createAuthorityList(account.getRole().name()));
