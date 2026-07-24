@@ -1,12 +1,15 @@
 package com.vti.service.impl;
 
+import com.vti.config.JWTUtils;
 import com.vti.dto.AccountDTO;
+import com.vti.dto.AccountLoginDTO;
 import com.vti.entity.Account;
 import com.vti.entity.Department;
 import com.vti.entity.Position;
 import com.vti.exception.BusinessException;
 import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.form.AccountSearchForm;
+import com.vti.form.LoginForm;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.IDepartmentRepository;
 import com.vti.repository.IPositionRepository;
@@ -19,6 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +49,12 @@ public class AccountServiceImpl implements IAccountService {
 
     @Autowired
     private IPositionRepository positionRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JWTUtils jwtUtils;
 
     @Override
     public Page<AccountDTO> findAll(AccountSearchForm form, Pageable pageable) {
@@ -153,20 +165,12 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public AccountDTO login(Principal principal) {
-        String username = principal.getName();
-        Account account = accountRepository.findByUsername(username);
-        return modelMapper.map(account, AccountDTO.class);
-    }
-
-    // load ra các thông tin của User(username, password, role)
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByUsername(username);
-        if (Objects.isNull(account)) {
-            throw BusinessException.builder().message("Username not found").build();
-        }
-        return new User(username, account.getPassword(),
-                AuthorityUtils.createAuthorityList(account.getRole().name()));
+    public AccountLoginDTO login(LoginForm loginForm) {
+        // check xem username va password co dung ko
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword()));
+        // gen token
+        String token = jwtUtils.generateToken(loginForm.getUsername());
+        return new AccountLoginDTO(loginForm.getUsername(), token);
     }
 }
