@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -35,4 +36,6 @@ public class AccountCreateOrUpdateForm {
     @NotNull(message = "Position phải có giá trị")
     @PositiveOrZero(message = "PositionId phải lớn hơn 0")
     private Integer positionId;
+
+    private MultipartFile avatar;
 }

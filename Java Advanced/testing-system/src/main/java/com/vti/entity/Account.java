@@ -50,4 +50,10 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
+    @Column(name = "token")
+    private String token;// token quên mk
 }

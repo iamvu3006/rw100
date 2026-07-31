@@ -4,6 +4,7 @@ import com.vti.dto.AccountDTO;
 import com.vti.form.AccountCreateOrUpdateForm;
 import com.vti.form.AccountSearchForm;
 import com.vti.service.IAccountService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,13 +42,14 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody @Valid AccountCreateOrUpdateForm form) {
+    @Operation
+    public ResponseEntity<String> create(@Valid AccountCreateOrUpdateForm form) {
         accountService.create(form);
         return new ResponseEntity<>("Created", HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@RequestBody AccountCreateOrUpdateForm form, @PathVariable(name = "id") Integer id) {
+    public ResponseEntity<String> update(AccountCreateOrUpdateForm form, @PathVariable(name = "id") Integer id) {
         accountService.update(form, id);
         return new ResponseEntity<>("Updated", HttpStatus.OK);
     }

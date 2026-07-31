@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface IAccountRepository extends JpaRepository<Account, Integer>, JpaSpecificationExecutor<Account> {
     Account findByUsername(String username);
+    Account findByEmail(String email);
 
     // tim theo username  nhưng ko muốn dùng findByUsername
     @Query("FROM Account a where username = :username")

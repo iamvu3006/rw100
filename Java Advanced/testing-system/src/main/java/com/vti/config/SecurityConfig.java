@@ -44,7 +44,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "api/v1/accounts/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "api/v1/accounts/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "api/v1/accounts/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers("/api/v1/auth/**").permitAll()// các api này ko cần login khi call
+                        .requestMatchers("/api/v1/auth/**", "api/v1/hello/**").permitAll()// các api này ko cần login khi call
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()// các api này ko cần login khi call
                         .anyRequest().authenticated()// các api còn lại thì ko cần xét quyền
                 )
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint)
