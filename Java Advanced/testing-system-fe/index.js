@@ -4,8 +4,7 @@ var vTheme = "";
 var baseUrl = "http://localhost:8080/api/v1/accounts";
 var baseUrlDepartment = "http://localhost:8080/api/v1/departments";
 var baseUrlPosition = "http://localhost:8080/api/v1/positions";
-var baseAvt =
-    "https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg";
+var baseAvt = ".\\img\\";
 var pageNumber = 0;
 var emailRules = {
     name: "Email",
@@ -23,6 +22,7 @@ var fullnameRules = {
     required: true,
     length: 100,
 };
+var loginInfor = JSON.parse(localStorage.getItem("loginInfor"));
 
 loadData(); // load ra ds account
 loadDepartment();
@@ -69,6 +69,12 @@ function loadData() {
         type: "GET",
         url: baseUrl + subUrl,
         dataType: "JSON",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", `Bearer ${loginInfor.token}`);
+        },
+        headers: {
+            Authorization: "Basic " + btoa("admin:123456"),
+        },
         success: function (response) {
             // call api thanh cong
             accounts = response.content;
@@ -79,6 +85,7 @@ function loadData() {
                 tableContent +=
                     "<td><img src=" +
                     baseAvt +
+                    accounts[i].avatarUrl +
                     " style='height: 50px' alt='Image' /></td>";
                 tableContent += "<td>" + accounts[i].username + "</td>";
                 tableContent += "<td>" + accounts[i].fullName + "</td>";
@@ -134,9 +141,7 @@ function loadData() {
                 `<li ${response.last == true ? `class="disabled"` : ``} ><a href="#" ${response.last == true ? `aria-disabled="true"` : `onclick="changePage(${pageNumber + 1})"`} >&raquo;</a></li>`,
             ); // <<
         },
-        error: function (error) {
-            alert("Call api get accounts thất bại");
-        },
+        error: function (error) {},
     });
 }
 
@@ -146,13 +151,17 @@ function onDelete(idDelete) {
         $.ajax({
             type: "DELETE",
             url: baseUrl + "/" + idDelete,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(
+                    "Authorization",
+                    `Bearer ${loginInfor.token}`,
+                );
+            },
             success: function (response) {
                 alert("Xóa thành công!");
                 loadData();
             },
-            error: function (error) {
-                alert("Call api xóa thất bại");
-            },
+            error: function (error) {},
         });
     }
 }
@@ -169,28 +178,31 @@ function onCreate() {
             alert("Đang update, ko thể tạo mới dc");
             return;
         }
-        var v_avatar = $("#inputAvatar").val();
-        var v_username = $("#inputUsername").val();
-        var v_fullName = $("#inputFullname").val();
-        var v_email = $("#inputEmail").val();
-        var v_departmentID = $("#inputDepartmentName").val();
-        var v_positionID = $("#inputPositionName").val();
 
-        // đưa các dữ liệu trên vào object // object của js
-        var account = {
-            username: v_username,
-            fullName: v_fullName,
-            email: v_email,
-            departmentId: v_departmentID,
-            positionId: v_positionID,
-        };
-        //https://images2.thanhnien.vn/528068263637045248/2024/1/25/e093e9cfc9027d6a142358d24d2ee350-65a11ac2af785880-17061562929701875684912.jpg
+        var file = $("#inputAvatar")[0].files[0];
+
+        // FormData
+        var formData = new FormData();
+        formData.append("username", $("#inputUsername").val());
+        formData.append("fullName", $("#inputFullname").val());
+        formData.append("email", $("#inputEmail").val());
+        formData.append("departmentId", $("#inputDepartmentName").val());
+        formData.append("positionId", $("#inputPositionName").val());
+        if (file) formData.append("avatar", file);
+
         // call api dể thêm mới account
         $.ajax({
             type: "POST",
             url: baseUrl,
-            data: JSON.stringify(account), // chuyển account từ obejct của JS thành JSON
-            contentType: "application/json",
+            data: formData, // chuyển account từ obejct của JS thành JSON
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(
+                    "Authorization",
+                    `Bearer ${loginInfor.token}`,
+                );
+            },
             success: function (response) {
                 alert("Thêm dữ liệu thành công");
                 // hiển thị lại ds account
@@ -234,6 +246,9 @@ function onHandleEdit(idUpdate) {
         type: "GET",
         url: baseUrl + "/" + idUpdate,
         dataType: "JSON",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", `Bearer ${loginInfor.token}`);
+        },
         success: function (response) {
             $(".modal-title").empty();
             $(".modal-title").append("<div>Update Account</div>");
@@ -247,9 +262,7 @@ function onHandleEdit(idUpdate) {
             $("#inputPositionName").val(response.positionId);
             v_idUpdate = idUpdate; // lưu lại id cần update
         },
-        error: function (error) {
-            alert("Call api lấy thông tin thất bại");
-        },
+        error: function (error) {},
     });
 }
 
@@ -261,26 +274,28 @@ function onUpdate(idDelete) {
     ) {
         return;
     } else {
-        var v_avatar = $("#inputAvatar").val();
-        var v_username = $("#inputUsername").val();
-        var v_fullName = $("#inputFullname").val();
-        var v_email = $("#inputEmail").val();
-        var v_departmentID = $("#inputDepartmentName").val();
-        var v_positionID = $("#inputPositionName").val();
-        // lay ra doi tuong can update
-        var accountUpdate = {
-            username: v_username,
-            fullName: v_fullName,
-            email: v_email,
-            departmentId: v_departmentID,
-            positionId: v_positionID,
-        };
+        var file = $("#inputAvatar")[0].files[0];
+        // FormData
+        var formData = new FormData();
+        formData.append("username", $("#inputUsername").val());
+        formData.append("fullName", $("#inputFullname").val());
+        formData.append("email", $("#inputEmail").val());
+        formData.append("departmentId", $("#inputDepartmentName").val());
+        formData.append("positionId", $("#inputPositionName").val());
+        if (file) formData.append("avatar", file);
         // call api update
         $.ajax({
             type: "PUT",
             url: baseUrl + "/" + v_idUpdate,
-            data: JSON.stringify(accountUpdate),
-            contentType: "application/json",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(
+                    "Authorization",
+                    `Bearer ${loginInfor.token}`,
+                );
+            },
             success: function (response) {
                 alert("Update dữ liệu thành công");
                 // hiển thi ls account
@@ -302,6 +317,9 @@ function loadDepartment() {
         type: "GET",
         url: baseUrlDepartment,
         dataType: "JSON",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", `Bearer ${loginInfor.token}`);
+        },
         success: function (response) {
             //
             var content = "";
@@ -316,9 +334,7 @@ function loadDepartment() {
             $("#deparmentSearchID").append("<option value=''>Tất cả</option>");
             $("#deparmentSearchID").append(content);
         },
-        error: function (error) {
-            alert("Call api get department thất bại");
-        },
+        error: function (error) {},
     });
 }
 
@@ -327,6 +343,9 @@ function loadPosition() {
         type: "GET",
         url: baseUrlPosition,
         dataType: "JSON",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", `Bearer ${loginInfor.token}`);
+        },
         success: function (response) {
             //
             var content = "";
@@ -341,9 +360,7 @@ function loadPosition() {
             $("#positionSearchID").append("<option value=''>Tất cả</option>");
             $("#positionSearchID").append(content);
         },
-        error: function (error) {
-            alert("Call api get position thất bại");
-        },
+        error: function (error) {},
     });
 }
 
@@ -385,3 +402,10 @@ function hideAndResetModal() {
 $("#modal-id").on("hidden.bs.modal", function () {
     hideAndResetModal();
 });
+
+function logout() {
+    // tro ve trang dang nhap
+    window.open("./login.html", "_self");
+    // clear localStorage
+    localStorage.removeItem("loginInfor");
+}
