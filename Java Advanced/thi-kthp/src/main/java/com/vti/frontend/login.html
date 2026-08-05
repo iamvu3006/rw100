@@ -1,80 +1,38 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-
-        <!-- Latest compiled and minified CSS & JS -->
-        <link
-            rel="stylesheet"
-            media="screen"
-            href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"
-        />
-        <script src="//code.jquery.com/jquery.js"></script>
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <form
-                action=""
-                method="POST"
-                class="form-horizontal"
-                role="form"
-                id="loginForm"
-            >
-                <div class="form-group">
-                    <legend>LOGIN</legend>
-                </div>
-
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group">
-                        <label
-                            for="inputUsername"
-                            class="col-sm-2 control-label"
-                            >Username:</label
-                        >
-                        <div class="col-sm-10">
-                            <input
-                                type="text"
-                                name="Username"
-                                id="inputUsername"
-                                class="form-control"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label
-                            for="inputPassword"
-                            class="col-sm-2 control-label"
-                            >Password:</label
-                        >
-                        <div class="col-sm-10">
-                            <input
-                                type="password"
-                                name="Password"
-                                id="inputPassword"
-                                class="form-control"
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="col-sm-10 col-sm-offset-2">
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            onclick="handleLogin()"
-                        >
-                            LOGIN
-                        </button>
-                        <a href="forgotPassword.html"">Quên mật khẩu</a>
-                    </div>
-                </div>
-            </form>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng nhập · RW100</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-left">
+      <div class="auth-mark">RW100</div>
+      <div class="auth-tag">Restaurant Order Desk</div>
+      <p class="auth-quote">Quản lý bàn, thực đơn và đơn hàng theo thời gian thực — mọi phiếu order được ghi nhận rõ ràng như một tờ order thật từ bếp.</p>
+    </div>
+    <div class="auth-right">
+      <form class="auth-form" id="loginForm" novalidate>
+        <h1>Đăng nhập</h1>
+        <p>Nhập tài khoản nhân viên để tiếp tục.</p>
+        <div class="banner banner-error" id="errorBanner"></div>
+        <div class="form-row">
+          <label for="username">Tên đăng nhập</label>
+          <input class="field" id="username" name="username" autocomplete="username" placeholder="vd: staff01">
         </div>
-    </body>
-    <script src="login.js"></script>
+        <div class="form-row">
+          <label for="password">Mật khẩu</label>
+          <input class="field" id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" type="submit" id="submitBtn">Đăng nhập</button>
+        <div class="auth-switch">Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></div>
+      </form>
+    </div>
+  </div>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/login.js"></script>
+</body>
 </html>

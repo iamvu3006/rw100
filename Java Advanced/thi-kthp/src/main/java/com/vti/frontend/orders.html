@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đơn hàng · RW100</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="page-head">
+      <div><h1>Đơn hàng</h1><p>Tạo và theo dõi order theo từng bàn.</p></div>
+      <button class="btn btn-primary" id="btnNewOrder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Tạo đơn mới</button>
+    </div>
+
+    <div class="filter-bar">
+      <select class="field" id="statusFilter">
+        <option value="">Tất cả trạng thái</option>
+        <option value="CREATED">Đang xử lý</option>
+        <option value="PAID">Đã thanh toán</option>
+        <option value="CANCELLED">Đã hủy</option>
+      </select>
+      <select class="field" id="tableFilter"><option value="">Tất cả bàn</option></select>
+    </div>
+
+    <div class="tickets-grid" id="ordersGrid"></div>
+    <div id="emptyState"></div>
+    <div class="pagination" id="pagination" style="display:none"></div>
+  </div>
+
+  <!-- Modal tạo đơn -->
+  <div class="modal-overlay" id="newOrderModal">
+    <div class="modal modal-wide">
+      <div class="modal-header"><h2>Tạo đơn hàng mới</h2><button class="modal-close" onclick="closeModal('newOrderModal')">✕</button></div>
+      <div class="modal-body">
+        <div class="form-row"><label>Chọn bàn</label>
+          <select class="field" id="orderTable" style="width:100%"></select>
+        </div>
+        <div class="order-builder">
+          <div>
+            <div class="tabs" id="categoryTabs"></div>
+            <div class="dish-pick-list" id="dishPickList"></div>
+          </div>
+          <div class="cart-box">
+            <h3 style="font-size:14px;margin-bottom:10px">Món đã chọn</h3>
+            <div id="cartList"></div>
+            <div class="cart-total"><span>Tổng cộng</span><span id="cartTotal">0 ₫</span></div>
+          </div>
+        </div>
+        <div class="error-text" id="orderFormError"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeModal('newOrderModal')">Hủy</button>
+        <button type="button" class="btn btn-primary" id="submitOrderBtn">Tạo đơn</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal chi tiết đơn -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal">
+      <div class="modal-header"><h2 id="detailTitle">Chi tiết đơn hàng</h2><button class="modal-close" onclick="closeModal('detailModal')">✕</button></div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-footer" id="detailFooter"></div>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script src="assets/js/orders.js"></script>
+</body>
+</html>

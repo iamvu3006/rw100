@@ -26,15 +26,15 @@ WHERE NOT EXISTS (SELECT 1 FROM category WHERE name = 'Tráng miệng');
 
 -- 3. DISHES
 INSERT INTO dish (name, price, description, status, category_id)
-SELECT 'Cơm Gà Hải Nam', 89000, 'Cơm dẻo gà luộc mềm', 'AVAILABLE', (SELECT id FROM category WHERE name = 'Món chính')
+SELECT 'Cơm Gà Hải Nam', 89000, 'Cơm dẻo gà luộc mềm', 'AVAILABLE', (SELECT category_id FROM category WHERE name = 'Món chính')
 WHERE NOT EXISTS (SELECT 1 FROM dish WHERE name = 'Cơm Gà Hải Nam');
 
 INSERT INTO dish (name, price, description, status, category_id)
-SELECT 'Phở Bò Tái Chín', 75000, 'Phở bò truyền thống', 'AVAILABLE', (SELECT id FROM category WHERE name = 'Món chính')
+SELECT 'Phở Bò Tái Chín', 75000, 'Phở bò truyền thống', 'AVAILABLE', (SELECT category_id FROM category WHERE name = 'Món chính')
 WHERE NOT EXISTS (SELECT 1 FROM dish WHERE name = 'Phở Bò Tái Chín');
 
 INSERT INTO dish (name, price, description, status, category_id)
-SELECT 'Trà Đào Cam Sả', 35000, 'Trà đào mát lạnh', 'AVAILABLE', (SELECT id FROM category WHERE name = 'Đồ uống')
+SELECT 'Trà Đào Cam Sả', 35000, 'Trà đào mát lạnh', 'AVAILABLE', (SELECT category_id FROM category WHERE name = 'Đồ uống')
 WHERE NOT EXISTS (SELECT 1 FROM dish WHERE name = 'Trà Đào Cam Sả');
 
 -- 4. DINING TABLES

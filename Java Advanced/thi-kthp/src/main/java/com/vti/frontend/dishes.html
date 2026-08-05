@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Món ăn · RW100</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="page-head">
+      <div><h1>Món ăn</h1><p>Quản lý thực đơn: giá, danh mục và trạng thái phục vụ.</p></div>
+      <button class="btn btn-primary" id="btnAdd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Thêm món</button>
+    </div>
+
+    <div class="filter-bar">
+      <input class="field" id="searchInput" placeholder="Tìm theo tên món..." style="min-width:220px">
+      <select class="field" id="categoryFilter"><option value="">Tất cả danh mục</option></select>
+      <select class="field" id="statusFilter">
+        <option value="">Tất cả trạng thái</option>
+        <option value="AVAILABLE">Đang phục vụ</option>
+        <option value="UNAVAILABLE">Ngừng phục vụ</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Tên món</th><th>Danh mục</th><th>Giá</th><th>Trạng thái</th><th style="text-align:right">Hành động</th></tr></thead>
+        <tbody id="dishBody"></tbody>
+      </table>
+      <div id="emptyState"></div>
+      <div class="pagination" id="pagination" style="display:none"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="dishModal">
+    <div class="modal">
+      <div class="modal-header"><h2 id="modalTitle">Thêm món ăn</h2><button class="modal-close" onclick="closeModal('dishModal')">✕</button></div>
+      <form id="dishForm">
+        <div class="modal-body">
+          <input type="hidden" id="dishId">
+          <div class="form-row"><label>Tên món</label><input class="field" id="name" placeholder="vd: Cơm Gà Hải Nam"></div>
+          <div class="form-grid">
+            <div class="form-row"><label>Giá (VNĐ)</label><input class="field" id="price" type="number" min="0" placeholder="89000"></div>
+            <div class="form-row"><label>Danh mục</label><select class="field" id="categoryId"></select></div>
+          </div>
+          <div class="form-row"><label>Ảnh (URL)</label><input class="field" id="imageUrl" placeholder="https://..."></div>
+          <div class="form-row"><label>Mô tả</label><textarea class="field" id="description" rows="2" placeholder="Mô tả món ăn..."></textarea></div>
+          <div class="form-row"><label>Trạng thái</label>
+            <select class="field" id="status">
+              <option value="AVAILABLE">Đang phục vụ</option>
+              <option value="UNAVAILABLE">Ngừng phục vụ</option>
+            </select>
+          </div>
+          <div class="error-text" id="formError"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('dishModal')">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script src="assets/js/dishes.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bàn ăn · RW100</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <div class="page-head">
+      <div><h1>Bàn ăn</h1><p>Theo dõi và cập nhật trạng thái bàn theo thời gian thực.</p></div>
+      <button class="btn btn-primary" id="btnAdd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        Thêm bàn</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Số bàn</th><th>Sức chứa</th><th>Trạng thái</th><th style="text-align:right">Hành động</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="emptyState"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="tableModal">
+    <div class="modal">
+      <div class="modal-header"><h2 id="modalTitle">Thêm bàn ăn</h2><button class="modal-close" onclick="closeModal('tableModal')">✕</button></div>
+      <form id="tableForm">
+        <div class="modal-body">
+          <input type="hidden" id="tableId">
+          <div class="form-row"><label>Số bàn</label><input class="field" id="tableNumber" placeholder="vd: B03"></div>
+          <div class="form-row"><label>Sức chứa (số người)</label><input class="field" id="capacity" type="number" min="1" placeholder="4"></div>
+          <div class="form-row"><label>Trạng thái</label>
+            <select class="field" id="status">
+              <option value="EMPTY">Trống</option>
+              <option value="OCCUPIED">Đang dùng</option>
+              <option value="RESERVED">Đã đặt trước</option>
+            </select>
+          </div>
+          <div class="error-text" id="formError"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('tableModal')">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="saveBtn">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/layout.js"></script>
+  <script src="assets/js/tables.js"></script>
+</body>
+</html>

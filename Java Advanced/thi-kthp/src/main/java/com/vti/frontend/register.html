@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng ký · RW100</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-left">
+      <div class="auth-mark">RW100</div>
+      <div class="auth-tag">Restaurant Order Desk</div>
+      <p class="auth-quote">Tạo tài khoản nhân viên mới để bắt đầu ghi nhận order, theo dõi bàn và thực đơn.</p>
+    </div>
+    <div class="auth-right">
+      <form class="auth-form" id="registerForm" novalidate>
+        <h1>Tạo tài khoản</h1>
+        <p>Tài khoản mới sẽ có vai trò <b>Nhân viên</b>.</p>
+        <div class="banner banner-error" id="errorBanner"></div>
+        <div class="form-row">
+          <label for="fullName">Họ và tên</label>
+          <input class="field" id="fullName" placeholder="Nguyễn Văn A">
+        </div>
+        <div class="form-row">
+          <label for="username">Tên đăng nhập</label>
+          <input class="field" id="username" autocomplete="username" placeholder="vd: staff02">
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input class="field" id="email" type="email" placeholder="ban@restaurant.com">
+        </div>
+        <div class="form-row">
+          <label for="password">Mật khẩu</label>
+          <input class="field" id="password" type="password" autocomplete="new-password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" type="submit" id="submitBtn">Đăng ký</button>
+        <div class="auth-switch">Đã có tài khoản? <a href="login.html">Đăng nhập</a></div>
+      </form>
+    </div>
+  </div>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/register.js"></script>
+</body>
+</html>
