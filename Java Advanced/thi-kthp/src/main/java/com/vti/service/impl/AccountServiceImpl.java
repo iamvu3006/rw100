@@ -1,5 +1,17 @@
 package com.vti.service.impl;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.vti.config.JWTUtils;
 import com.vti.dto.AccountDTO;
 import com.vti.dto.AccountLoginDTO;
@@ -14,16 +26,6 @@ import com.vti.form.RegisterForm;
 import com.vti.repository.IAccountRepository;
 import com.vti.service.IAccountService;
 import com.vti.specification.AccountSpecification;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -42,6 +44,17 @@ public class AccountServiceImpl implements IAccountService {
 
     @Autowired
     private JWTUtils jwtUtils;
+
+    /**
+     * Lấy tài khoản đang đăng nhập từ SecurityContext (null nếu không có / request công khai).
+     */
+    private Account getCurrentAccount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+        return accountRepository.findByUsername(authentication.getName());
+    }
 
     @Override
     public Page<AccountDTO> findAll(AccountSearchForm form, Pageable pageable) {
@@ -97,6 +110,22 @@ public class AccountServiceImpl implements IAccountService {
             throw BusinessException.builder().message("Email đã tồn tại trên hệ thống").build();
         }
 
+        Account currentAccount = getCurrentAccount();
+        boolean isSelfUpdate = currentAccount != null && currentAccount.getId().equals(id);
+
+        // Không cho ADMIN tự đổi role của chính mình (kể cả đang là ADMIN hay STAFF)
+        if (isSelfUpdate && form.getRole() != null && form.getRole() != account.getRole()) {
+            throw BusinessException.builder().message("Không thể tự thay đổi vai trò của chính mình").build();
+        }
+
+        // Không cho hạ quyền admin cuối cùng của hệ thống
+        if (account.getRole() == Role.ADMIN && form.getRole() == Role.STAFF) {
+            long adminCount = accountRepository.countByRole(Role.ADMIN);
+            if (adminCount <= 1) {
+                throw BusinessException.builder().message("Không thể hạ quyền admin cuối cùng của hệ thống").build();
+            }
+        }
+
         account.setFullName(form.getFullName());
         account.setEmail(form.getEmail());
         if (form.getRole() != null) {
@@ -112,9 +141,21 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     @Transactional
     public void deleteById(Integer id) {
-        if (!accountRepository.existsById(id)) {
-            throw BusinessException.builder().message("Tài khoản không tồn tại with ID: " + id).build();
+        Account account = accountRepository.findById(id)
+                .orElseThrow(() -> BusinessException.builder().message("Tài khoản không tồn tại with ID: " + id).build());
+
+        Account currentAccount = getCurrentAccount();
+        if (currentAccount != null && currentAccount.getId().equals(id)) {
+            throw BusinessException.builder().message("Không thể tự xóa tài khoản của chính mình").build();
         }
+
+        if (account.getRole() == Role.ADMIN) {
+            long adminCount = accountRepository.countByRole(Role.ADMIN);
+            if (adminCount <= 1) {
+                throw BusinessException.builder().message("Không thể xóa admin cuối cùng của hệ thống").build();
+            }
+        }
+
         accountRepository.deleteById(id);
     }
 
@@ -144,7 +185,9 @@ public class AccountServiceImpl implements IAccountService {
         createForm.setPassword(form.getPassword());
         createForm.setFullName(form.getFullName());
         createForm.setEmail(form.getEmail());
-        createForm.setRole(form.getRole() != null ? form.getRole() : Role.STAFF);
+        // Cố ý bỏ qua form.getRole() — endpoint /auth/register là permitAll(),
+        // không được phép để client tự chọn role (chặn leo thang đặc quyền ADMIN qua đăng ký công khai)
+        createForm.setRole(Role.STAFF);
         create(createForm);
     }
 }

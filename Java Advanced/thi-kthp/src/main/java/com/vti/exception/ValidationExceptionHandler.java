@@ -1,5 +1,8 @@
 package com.vti.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @ControllerAdvice
 public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -21,8 +21,10 @@ public class ValidationExceptionHandler extends ResponseEntityExceptionHandler {
             , HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
 
-        for (ObjectError err: ex.getBindingResult().getAllErrors()) {
-            String field = ((FieldError) err).getField();
+        for (ObjectError err : ex.getBindingResult().getAllErrors()) {
+            String field = (err instanceof FieldError)
+                ? ((FieldError) err).getField()
+                : err.getObjectName();
             String message = err.getDefaultMessage();
             errors.put(field, message);
         }

@@ -1,22 +1,25 @@
 package com.vti.service.impl;
 
-import com.vti.dto.DishDTO;
-import com.vti.entity.Category;
-import com.vti.entity.Dish;
-import com.vti.exception.BusinessException;
-import com.vti.form.DishCreateForm;
-import com.vti.form.DishFilterForm;
-import com.vti.form.DishUpdateForm;
-import com.vti.repository.ICategoryRepository;
-import com.vti.repository.IDishRepository;
-import com.vti.service.IDishService;
-import com.vti.specification.DishSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.vti.dto.DishDTO;
+import com.vti.entity.Category;
+import com.vti.entity.Dish;
+import com.vti.enums.DishStatus;
+import com.vti.exception.BusinessException;
+import com.vti.form.DishCreateForm;
+import com.vti.form.DishFilterForm;
+import com.vti.form.DishUpdateForm;
+import com.vti.repository.ICategoryRepository;
+import com.vti.repository.IDishRepository;
+import com.vti.repository.IOrderItemRepository;
+import com.vti.service.IDishService;
+import com.vti.specification.DishSpecification;
 
 @Service
 public class DishServiceImpl implements IDishService {
@@ -26,6 +29,9 @@ public class DishServiceImpl implements IDishService {
 
     @Autowired
     private ICategoryRepository categoryRepository;
+
+    @Autowired
+    private IOrderItemRepository orderItemRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -94,10 +100,19 @@ public class DishServiceImpl implements IDishService {
 
     @Override
     @Transactional
-    public void deleteById(Integer id) {
-        if (!dishRepository.existsById(id)) {
-            throw BusinessException.builder().message("Món ăn không tồn tại with ID: " + id).build();
+    public boolean deleteById(Integer id) {
+        Dish dish = dishRepository.findById(id)
+                .orElseThrow(() -> BusinessException.builder().message("Món ăn không tồn tại with ID: " + id).build());
+
+        boolean isUsedInOrder = orderItemRepository.existsByDishId(id);
+
+        if (isUsedInOrder) {
+            dish.setStatus(DishStatus.UNAVAILABLE);
+            dishRepository.save(dish);
+            return false;
         }
+
         dishRepository.deleteById(id);
+        return true;
     }
 }

@@ -1,15 +1,15 @@
 package com.vti.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalHandlerException {
@@ -22,6 +22,15 @@ public class GlobalHandlerException {
         errors.put("message", ex.getMessage());
 
         return new ResponseEntity<>(errors, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)//409
+    public ResponseEntity<?> dataIntegrityViolationHandler(DataIntegrityViolationException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("status", "409");
+        errors.put("message", "Không thể thực hiện vì dữ liệu này đang được sử dụng ở nơi khác (VD: món ăn đã có trong đơn hàng).");
+
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(AuthenticationException.class)//401
