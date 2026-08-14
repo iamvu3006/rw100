@@ -1,4 +1,4 @@
-class Person {
+export default class Person {
     id: number;
     name: string;
     address: string;
@@ -22,6 +22,4 @@ class Person {
     }
 }
 
-var myName = "iamvu";
-
-export { Person, myName };
+export var myName = "iamvu";

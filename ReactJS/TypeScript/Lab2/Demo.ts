@@ -1,13 +1,14 @@
-import {Person, myName} from "./Person";
+import {myName} from "./Person";
+import v_Person from "./Person";
 
 console.log(`myName: ${myName}`);
 
-var person1= new Person();
+var person1= new v_Person();
 person1.id=1;
 person1.name="Nguyen Van A";
 person1.address="Ha Noi";
 
-var person2= new Person();
+var person2= new v_Person();
 person2.id=2;
 person2.name="Nguyen Van B";
 person2.address="Hai Phong";
