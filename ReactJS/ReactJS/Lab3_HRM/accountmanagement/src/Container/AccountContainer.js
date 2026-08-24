@@ -15,12 +15,19 @@ function AccountContainer(props) {
     // console.log("click!!");
     setShowForm(true);
   };
+
+  // Hàm Callback xử lý khi nhấn nút Close ở ModalCreateNewAccount
+  let onHandleCloseModal = () => {
+    // console.log("close");
+    setShowForm(false);
+  };
+
   return (
     <Container>
       {/* Nút thêm mới */}
       <CreateButton onHandleCreateButtuon={onHandleCreateButtuon} />
       {/* Form thêm mới Account*/}
-      <ModalCreateNewAccount showForm={showForm} />
+      <ModalCreateNewAccount showForm={showForm} onHandleCloseModal={onHandleCloseModal} />
       {/* Form kết quả */}
       <ResultForm></ResultForm>
     </Container>
