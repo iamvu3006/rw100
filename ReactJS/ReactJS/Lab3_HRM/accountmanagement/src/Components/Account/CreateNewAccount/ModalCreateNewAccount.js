@@ -13,10 +13,12 @@ import InputForm from "./InputForm";
 
 
 function ModalCreateNewAccount(props) {
+  // Gọi lại các props truyền từ bên ngoài vào
+  let { showForm } = props;
   return (
     <Container>
       <br />
-      <Modal isOpen={true}>
+      <Modal isOpen={showForm}>
         <ModalHeader>
           <h3>Create New Account</h3>
         </ModalHeader>
@@ -30,5 +32,6 @@ function ModalCreateNewAccount(props) {
     </Container>
   );
 }
+
 
 export default ModalCreateNewAccount;
