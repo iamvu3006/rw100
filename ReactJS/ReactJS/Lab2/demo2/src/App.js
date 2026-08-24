@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 import ComponentsBottom from "./Component/ComponentsBottom";
 import ComponentsTop from "./Component/ComponentsTop";
-
+import LifeCycleDemo from "./Component/LifeCycleDemo";
 function App() {
   // State lưu trữ dữ liệu truyền từ Top lên App
   const [data, setData] = useState("");
@@ -15,15 +15,14 @@ function App() {
 
   return (
     <div className="App">
-      <ComponentsTop
+      {/* <ComponentsTop
         heading_panel="------ Component Top -------"
         getData={getDataFromComponentTop} // Gửi kèm props là 1 hàm tới ComponentTop
-        dataToTopChild={"This is data From App to Top_Child"}
       />
       <br />
       <br />
-      {/* Gửi prop data xuống ComponentBottom */}
-      <ComponentsBottom message="Welcome to VTI Academy!!" data={data} />
+      <ComponentsBottom data={data} /> */}
+      <LifeCycleDemo />
     </div>
   );
 }
