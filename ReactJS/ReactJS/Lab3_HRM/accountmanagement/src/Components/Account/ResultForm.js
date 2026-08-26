@@ -3,6 +3,9 @@ import { Table, Container } from "reactstrap";
 import ResultFormItem from "./ResultFormItem";
 
 function ResultForm(props) {
+  // Lấy các props từ bên trên truyền xuống
+  let { listAccount } = props;
+
   return (
     <Container>
       <br />
@@ -22,12 +25,8 @@ function ResultForm(props) {
           </tr>
         </thead>
         <tbody>
-          <ResultFormItem />
-          <ResultFormItem />
-          <ResultFormItem />
-          <ResultFormItem />
-          <ResultFormItem />
-          <ResultFormItem />
+          {/* Duyệt qua danh sách Account */}
+          <ResultFormItem listAccount={listAccount} />
         </tbody>
       </Table>
     </Container>

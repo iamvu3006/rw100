@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { Container } from "reactstrap";
 import CreateButton from "../Components/Account/CreateButton";
 import ModalCreateNewAccount from "../Components/Account/CreateNewAccount/ModalCreateNewAccount";
 import ResultForm from "../Components/Account/ResultForm";
+import Axios from "axios";
 
 
 function AccountContainer(props) {
@@ -33,6 +35,24 @@ function AccountContainer(props) {
     setShowForm(false);
   };
 
+    //
+  let fetchListAccount = function () {
+    const baseURL = `http://localhost:8080`; // Địa chỉ Server
+
+    Axios.get(`${baseURL}/api/v1/accounts`)
+      .then((response) => {
+        // console.log(response.data);
+        let listAccounts_API = response.data; // ListAcconunt nhân được khi Call API
+        setListAccount(listAccounts_API); // Set lại State
+      })
+      .catch((error) => console.log(error));
+  };
+
+  // Khai báo useEffect, useEffect này khi component được mount và mỗi khi State: listAccount thay đổi
+  useEffect(() => {
+    fetchListAccount();
+  }, []);
+
   return (
     <Container>
       {/* Nút thêm mới */}
@@ -44,7 +64,7 @@ function AccountContainer(props) {
         onHandleCreateNewAccount={onHandleCreateNewAccount}
       />
       {/* Form kết quả */}
-      <ResultForm></ResultForm>
+      <ResultForm listAccount = {listAccount}></ResultForm>
     </Container>
   );
 }
