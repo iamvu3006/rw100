@@ -11,7 +11,6 @@ function AccountContainer(props) {
   // Khai báo State để quản lý danh sách Account trên hệ thống
   let [listAccount, setListAccount] = useState([]);
 
-
   // Hàm Callback xử lý khi nhấn nút CreateNewAccount
   let onHandleCreateButtuon = () => {
     // console.log("click!!");
@@ -33,7 +32,6 @@ function AccountContainer(props) {
   // Thực hiện đóng Form sau khi thêm mới
     setShowForm(false);
   };
-
 
   return (
     <Container>

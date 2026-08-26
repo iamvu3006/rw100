@@ -18,7 +18,7 @@ function InputForm(props) {
   let [Postion, SetPostion] = useState("");
   // Hàm xử lý khi click vào nút Create
   let handleCreate = () => {
-let accountNew = {
+    let accountNew = {
       id: generateId(),
       email: Email,
       username: Username,
@@ -32,6 +32,13 @@ let accountNew = {
     onHandleCreateNewAccount(accountNew);
   };
 
+  // Hàm xử lý khi click vào nút Reset
+  let handleReset = () => {
+    // Set lại State các ô nhập liệu về ""
+    SetEmail("");
+    SetUsername("");
+    SetFullname("");
+  };
 
   return (
     <Container>
@@ -128,7 +135,9 @@ let accountNew = {
       <Button color="primary" onClick={handleCreate}>
         Create
       </Button>
-      <Button color="danger">Reset</Button>
+      <Button color="danger" onClick={handleReset}>
+        Reset
+      </Button>
     </Container>
   );
 }

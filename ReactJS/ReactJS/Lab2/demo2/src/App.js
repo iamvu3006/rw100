@@ -3,6 +3,7 @@ import "./App.css";
 import ComponentsBottom from "./Component/ComponentsBottom";
 import ComponentsTop from "./Component/ComponentsTop";
 import LifeCycleDemo from "./Component/LifeCycleDemo";
+import DemoHook from "./Hook/DemoHook";
 function App() {
   // State lưu trữ dữ liệu truyền từ Top lên App
   const [data, setData] = useState("");
@@ -22,7 +23,7 @@ function App() {
       <br />
       <br />
       <ComponentsBottom data={data} /> */}
-      <LifeCycleDemo />
+      <DemoHook />
     </div>
   );
 }
