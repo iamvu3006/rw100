@@ -9,13 +9,30 @@ import { getNowDate } from "../../../Utils/Helpers/getNowDate";
 
 function InputForm(props) {
   // Gọi lại các props từ bên trên truyền xuống
-  let { onHandleCreateNewAccount } = props;
+  let { onHandleCreateNewAccount, listDepartment, listPosition } = props;
   // Khai báo State lưu trữ giá trị của các ô nhập liệu
   let [Email, SetEmail] = useState("");
   let [Username, SetUsername] = useState("");
   let [Fullname, SetFullname] = useState("");
   let [Department, SetDepartment] = useState("");
   let [Postion, SetPostion] = useState("");
+
+  let departmentItem = listDepartment.map((department, index) => {
+    return (
+      <option value={department.id} key={index}>
+        {department.name}
+      </option>
+    );
+  });
+  // Hiển thị danh sách Position
+  let positionItem = listPosition.map((position, index) => {
+    return (
+      <option value={position.id} key={index}>
+        {position.name}
+      </option>
+    );
+  });
+
   // Hàm xử lý khi click vào nút Create
   let handleCreate = () => {
     let accountNew = {
@@ -23,8 +40,8 @@ function InputForm(props) {
       email: Email,
       username: Username,
       fullname: Fullname,
-      department: Department,
-      position: Postion,
+      department: Department || (listDepartment && listDepartment.length > 0 ? listDepartment[0].name : ""),
+      position: Postion || (listPosition && listPosition.length > 0 ? listPosition[0].name : ""),
       createDate: getNowDate(),
     };
     // console.log("accountNew: ", accountNew);
@@ -103,18 +120,15 @@ function InputForm(props) {
               SetDepartment(event.target.value);
             }}
           >
-            <option value={"Bán hàng"}>Bán hàng</option>
-            <option value={"Bảo vệ"}>Bảo vệ</option>
-            <option value={"Giám đốc"}>Giám đốc</option>
-            <option value={"Kỹ thuật"}>Kỹ thuật</option>
-            <option value={"Marketing"}>Marketing</option>
+            <option value="">-- Choose Department --</option>
+            {departmentItem}
           </Input>
         </FormGroup>
 
 
         {/* Postion */}
         <FormGroup>
-          <Label for="Postion">Select a Postion: </Label>
+          <Label for="Postion">Select a Position: </Label>
           <Input
             id="Postion"
             name="Postion"
@@ -124,10 +138,8 @@ function InputForm(props) {
               SetPostion(event.target.value);
             }}
           >
-            <option value={"Dev"}>Dev</option>
-            <option value={"Test"}>Test</option>
-            <option value={"Scrum_Master"}>Scrum_Master</option>
-            <option value={"PM"}>PM</option>
+            <option value="">-- Choose Position --</option>
+            {positionItem}
           </Input>
         </FormGroup>
       </Form>

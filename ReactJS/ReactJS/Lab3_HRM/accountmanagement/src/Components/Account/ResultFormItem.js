@@ -6,23 +6,31 @@ function ResultFormItem(props) {
   let { listAccount } = props;
   // Khai báo item hiển thị dữ liệu
   let items = "";
-  // Kiểm tra nếu listAccount !="" sẽ hiển thị dữ liệu
-  if (listAccount) {
+  // Kiểm tra nếu listAccount là mảng hợp lệ sẽ hiển thị dữ liệu
+  if (listAccount && Array.isArray(listAccount)) {
     items = listAccount.map((account, index) => {
+      let departmentDisplay = typeof account.department === "object" && account.department !== null 
+        ? account.department.name 
+        : account.department;
+
+      let positionDisplay = typeof account.position === "object" && account.position !== null 
+        ? account.position.name 
+        : account.position;
+
       return (
-        <tr key={index}>
+        <tr key={account.id || index}>
           <td>{account.id}</td>
           <td>{account.email}</td>
           <td>{account.username}</td>
           <td>{account.fullname}</td>
-          <td>{account.department}</td>
-          <td>{account.position}</td>
+          <td>{departmentDisplay}</td>
+          <td>{positionDisplay}</td>
           <td>{account.createDate}</td>
           <td>
             <Button color="warning">Edit</Button>
           </td>
           <td>
-            <Button color="warning">Delete</Button>
+            <Button color="danger">Delete</Button>
           </td>
         </tr>
       );
