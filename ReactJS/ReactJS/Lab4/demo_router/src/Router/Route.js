@@ -6,6 +6,7 @@ import DepartmentManagement from "../Components/DepartmentManagement";
 import Login from "../Components/Login";
 import SignUp from "../Components/SignUp";
 import Error from "./../Components/Error";
+import AccountDetail from "../Components/AccountDetail";
 
 let routes = (
   <Routes>
@@ -13,12 +14,10 @@ let routes = (
     <Route path="/home" element={<Home />} />
     <Route path="/about" element={<About />} />
     <Route path="/AccountManagement" element={<AccountManagement />} />
-    <Route
-      path="/DepartmentManagement"
-      element={<DepartmentManagement />}
-    />
+    <Route path="/DepartmentManagement" element={<DepartmentManagement />} />
     <Route path="/Login" element={<Login />} />
     <Route path="/Sign_Up" element={<SignUp />} />
+    <Route path="/AccountDetail/:ID" element={<AccountDetail />} exact />
     <Route path="*" element={<Error />} />
   </Routes>
 );

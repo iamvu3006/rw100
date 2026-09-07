@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login(props) {
   // Khai báo các state để lưu dữ liệu cho các ô nhập liệu
   let [Email, SetEmail] = useState("");
   let [Password, SetPassword] = useState("");
 
+  let navigate = useNavigate();
   // Hàm xử lý khi nhấn nút Login
   let handleLogin = () => {
-    alert("Email: " + Email);
-    alert("Password: " + Password);
+    // alert("Email: " + Email);
+    // alert("Password: " + Password);
+    alert("Login Success!");
+    navigate("/AccountManagement");
   };
 
   return (
