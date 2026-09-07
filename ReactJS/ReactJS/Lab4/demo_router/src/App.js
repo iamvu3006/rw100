@@ -10,59 +10,46 @@ import Error from "./Components/Error";
 
 function App() {
   return (
-    <div class="container">
-      {/* Menu */}
-      <nav
-        className="navbar navbar-inverse"
-        style={{ backgroundColor: "black", color: "black" }}
-      >
-        <div className="container-fluid">
-          <div className="navbar-header">
-            {/* <a className="navbar-brand" href="#">VTI ACADEMY</a> Chuyển thẻ này xuống phía dưới để không bị ảnh hưởng Css Boostrap*/}
+    <div className="container">
+      <div className="row">
+        {/* Menu */}
+        <nav
+          className="navbar navbar-inverse"
+          style={{ backgroundColor: "black", color: "black" }}
+        >
+          <div className="container-fluid">
+            <ul className="nav navbar-nav">
+              <li>
+                <Link to="/">VTI ACADEMY</Link>
+              </li>
+              <li>
+                <Link to="/home">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/AccountManagement">Account Management</Link>
+              </li>
+              <li>
+                <Link to="/DepartmentManagement">Department Management</Link>
+              </li>
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+              <li>
+                <Link to="/Sign_Up">
+                  <span className="glyphicon glyphicon-user"></span> Sign Up
+                </Link>
+              </li>
+              <li>
+                <Link to="/Login">
+                  <span className="glyphicon glyphicon-log-in"></span> Login
+                </Link>
+              </li>
+            </ul>
           </div>
-          <ul class="nav navbar-nav">
-            {/* <li><a href="#">Tramg chủ</a></li>
-              <li><a href="#">Khóa học</a></li>
-              <li><a href="#">Về chúng tôi</a></li>
-              <li><a href="#">Học viên</a></li>
-              <li><a href="#">Bài thi</a></li>
-              <li><a href="#">Đào tạo doanh nghiệp</a></li> 
-              Commnet đoạn này lại do không sử dụng thẻ a, thay thế bằng thẻ Link trong router.
-              */}
-            <li>
-              <Link to="/">VTI ACADEMY</Link>
-              {/* Chuyển từ phía trên xuống, tạo thành 1 thẻ li */}
-            </li>
-            <li>
-              <Link to="/home">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/AccountManagement">AccountManagement</Link>
-            </li>
-            <li>
-              <Link to="/DepartmentManagement">DepartmentManagement</Link>
-            </li>
-          </ul>
-          <ul className="nav navbar-nav navbar-right">
-            <li>
-              {/* <a href="#"> */}
-              <Link to="/Sign_Up">
-                <span className="glyphicon glyphicon-user"></span> Sign Up
-              </Link>
-            </li>
-            <li>
-              {/* <a href="#"> */}
-              <Link to="/Login">
-                <span className="glyphicon glyphicon-log-in"></span> Login
-              </Link>
-              {/* </a> */}
-            </li>
-          </ul>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Content */}
       <Routes>
