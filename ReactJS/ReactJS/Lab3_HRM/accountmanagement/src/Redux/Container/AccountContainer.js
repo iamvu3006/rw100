@@ -5,21 +5,21 @@ import CreateButton from "../../Components/Account/CreateButton";
 import ModalCreateNewAccount from "../../Components/Account/CreateNewAccount/ModalCreateNewAccount";
 import ResultForm from "../../Components/Account/ResultForm";
 // import Axios from "axios"; // Import thư viện Axios để sử dụng
-import { getListAccountAPI, addAccountNewAPI } from "../../api/AccountApi";
-import { getListDepartmentAPI } from "../../api/DepartmentApi";
-import { getListPositionAPI } from "../../api/PositionApi";
+import { addAccountNewAPI } from "../../api/AccountApi";
 import { useDispatch } from "react-redux";
 import { showFormAction } from "../Action/FormAction";
 import { closeFormAction } from "../Action/FormAction";
 import { actionFetchListAccountAPI } from "../Action/AccountAction";
+import { actionFetchListDepartmentAPI } from "../Action/DepartmentAction";
+import { actionFetchListPositionAPI } from "../Action/PositionAction";
 
 function AccountContainer(props) {
   // Khai báo State để quản lý danh sách Account trên hệ thống
   // let [listAccount, setListAccount] = useState([]);
   // Khai báo State để quản lý danh sách Department
-  let [listDepartment, setListDepartment] = useState([]);
-  // Khai báo State để quản lý danh sách Position
-  let [listPosition, setListPosition] = useState([]);
+  // let [listDepartment, setListDepartment] = useState([]);
+  // // Khai báo State để quản lý danh sách Position
+  // let [listPosition, setListPosition] = useState([]);
 
   // Khai báo hook để dispach Action
   let dispatchRedux = useDispatch();
@@ -57,26 +57,26 @@ function AccountContainer(props) {
   //   });
   // };
 
-  // Hàm load dữ liệu API cho Department
-  let fetchListDepartment = function () {
-    getListDepartmentAPI().then((response) => {
-      setListDepartment(response);
-    });
-  };
+  // // Hàm load dữ liệu API cho Department
+  // let fetchListDepartment = function () {
+  //   getListDepartmentAPI().then((response) => {
+  //     setListDepartment(response);
+  //   });
+  // };
 
-  // Hàm load dữ liệu API cho Position
-  let fetchListPosition = function () {
-    getListPositionAPI().then((response) => {
-      setListPosition(response);
-    });
-  };
+  // // Hàm load dữ liệu API cho Position
+  // let fetchListPosition = function () {
+  //   getListPositionAPI().then((response) => {
+  //     setListPosition(response);
+  //   });
+  // };
 
   // Khai báo useEffect khi component được mount
   useEffect(() => {
     // fetchListAccount();
     dispatchRedux(actionFetchListAccountAPI());
-    fetchListDepartment();
-    fetchListPosition();
+    dispatchRedux(actionFetchListDepartmentAPI());
+    dispatchRedux(actionFetchListPositionAPI());
   }, []);
 
   return (
@@ -88,8 +88,8 @@ function AccountContainer(props) {
         // showForm={showForm}
         onHandleCloseModal={onHandleCloseModal}
         onHandleCreateNewAccount={onHandleCreateNewAccount}
-        listDepartment={listDepartment}
-        listPosition={listPosition}
+        // listDepartment={listDepartment}
+        // listPosition={listPosition}
       />
       {/* Form kết quả */}
       <ResultForm />
