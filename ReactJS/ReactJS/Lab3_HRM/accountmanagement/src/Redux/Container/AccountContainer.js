@@ -11,10 +11,11 @@ import { getListPositionAPI } from "../../api/PositionApi";
 import { useDispatch } from "react-redux";
 import { showFormAction } from "../Action/FormAction";
 import { closeFormAction } from "../Action/FormAction";
+import { actionFetchListAccountAPI } from "../Action/AccountAction";
 
 function AccountContainer(props) {
   // Khai báo State để quản lý danh sách Account trên hệ thống
-  let [listAccount, setListAccount] = useState([]);
+  // let [listAccount, setListAccount] = useState([]);
   // Khai báo State để quản lý danh sách Department
   let [listDepartment, setListDepartment] = useState([]);
   // Khai báo State để quản lý danh sách Position
@@ -43,18 +44,18 @@ function AccountContainer(props) {
     // Gọi hàm call API
     addAccountNewAPI(accountNew_API).then((response) => {
       // Sau khi tạo dữ liệu thành công gọi hàm để load lại listAccount
-      fetchListAccount();
+      // fetchListAccount();
     });
     // Thực hiện đóng Form sau khi thêm mới
     dispatchRedux(closeFormAction());
   };
 
   // Hàm load dữ liệu API cho Account
-  let fetchListAccount = function () {
-    getListAccountAPI().then((response) => {
-      setListAccount(response);
-    });
-  };
+  // let fetchListAccount = function () {
+  //   getListAccountAPI().then((response) => {
+  //     setListAccount(response);
+  //   });
+  // };
 
   // Hàm load dữ liệu API cho Department
   let fetchListDepartment = function () {
@@ -72,7 +73,8 @@ function AccountContainer(props) {
 
   // Khai báo useEffect khi component được mount
   useEffect(() => {
-    fetchListAccount();
+    // fetchListAccount();
+    dispatchRedux(actionFetchListAccountAPI());
     fetchListDepartment();
     fetchListPosition();
   }, []);
@@ -90,7 +92,7 @@ function AccountContainer(props) {
         listPosition={listPosition}
       />
       {/* Form kết quả */}
-      <ResultForm listAccount={listAccount}></ResultForm>
+      <ResultForm />
     </Container>
   );
 }
