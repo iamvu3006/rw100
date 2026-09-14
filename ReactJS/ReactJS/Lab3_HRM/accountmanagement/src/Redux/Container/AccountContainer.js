@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Container } from "reactstrap";
-import CreateButton from "../Components/Account/CreateButton";
-import ModalCreateNewAccount from "../Components/Account/CreateNewAccount/ModalCreateNewAccount";
-import ResultForm from "../Components/Account/ResultForm";
+import CreateButton from "../../Components/Account/CreateButton";
+import ModalCreateNewAccount from "../../Components/Account/CreateNewAccount/ModalCreateNewAccount";
+import ResultForm from "../../Components/Account/ResultForm";
 // import Axios from "axios"; // Import thư viện Axios để sử dụng
-import { getListAccountAPI, addAccountNewAPI } from "../api/AccountApi";
-import { getListDepartmentAPI } from "../api/DepartmentApi";
-import { getListPositionAPI } from "../api/PositionApi";
+import { getListAccountAPI, addAccountNewAPI } from "../../api/AccountApi";
+import { getListDepartmentAPI } from "../../api/DepartmentApi";
+import { getListPositionAPI } from "../../api/PositionApi";
+import { useDispatch } from "react-redux";
+import { showFormAction } from "../Action/FormAction";
+import { closeFormAction } from "../Action/FormAction";
 
 function AccountContainer(props) {
-  // Khai báo State để quản lý trạng thái đóng mở của ModalCreateNewAccount(InputForm)
-  let [showForm, setShowForm] = useState(false);
   // Khai báo State để quản lý danh sách Account trên hệ thống
   let [listAccount, setListAccount] = useState([]);
   // Khai báo State để quản lý danh sách Department
@@ -19,13 +20,16 @@ function AccountContainer(props) {
   // Khai báo State để quản lý danh sách Position
   let [listPosition, setListPosition] = useState([]);
 
+  // Khai báo hook để dispach Action
+  let dispatchRedux = useDispatch();
+
   // Hàm Callback xử lý khi nhấn nút CreateNewAccount
   let onHandleCreateButtuon = () => {
-    setShowForm(true);
+    dispatchRedux(showFormAction());
   };
   // Hàm Callback xử lý khi nhấn nút Close ở ModalCreateNewAccount
   let onHandleCloseModal = () => {
-    setShowForm(false);
+    dispatchRedux(closeFormAction());
   };
   // Hàm Callback xử lý khi nhấn nút Create ở InputForm
   let onHandleCreateNewAccount = (accountNew) => {
@@ -42,7 +46,7 @@ function AccountContainer(props) {
       fetchListAccount();
     });
     // Thực hiện đóng Form sau khi thêm mới
-    setShowForm(false);
+    dispatchRedux(closeFormAction());
   };
 
   // Hàm load dữ liệu API cho Account
@@ -79,7 +83,7 @@ function AccountContainer(props) {
       <CreateButton onHandleCreateButtuon={onHandleCreateButtuon} />
       {/* Form thêm mới Account*/}
       <ModalCreateNewAccount
-        showForm={showForm}
+        // showForm={showForm}
         onHandleCloseModal={onHandleCloseModal}
         onHandleCreateNewAccount={onHandleCreateNewAccount}
         listDepartment={listDepartment}

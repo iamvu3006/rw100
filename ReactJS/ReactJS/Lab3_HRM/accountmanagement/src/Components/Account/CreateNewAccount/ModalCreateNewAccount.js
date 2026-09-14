@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   Button,
   Modal,
@@ -14,13 +15,18 @@ import InputForm from "./InputForm";
 
 function ModalCreateNewAccount(props) {
   // Gọi lại các props truyền từ bên ngoài vào
-  let { 
-    showForm, 
-    onHandleCloseModal, 
+  let {
+    // showForm,
+    onHandleCloseModal,
     onHandleCreateNewAccount,
     listDepartment,
-    listPosition
-   } = props;
+    listPosition,
+  } = props;
+
+  // Lấy giá trị State đang lưu trên Redux để sử dụng
+  let stateRedux = useSelector((state) => state);
+  // console.log("stateRedux: ", stateRedux);
+  let showForm = stateRedux.showForm;
 
   // Hàm xử lý khi nhấn nút Close
   let handleCloseModal = () => {
@@ -42,7 +48,9 @@ function ModalCreateNewAccount(props) {
           />
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={handleCloseModal}>Close</Button>
+          <Button color="danger" onClick={handleCloseModal}>
+            Close
+          </Button>
         </ModalFooter>
       </Modal>
     </Container>

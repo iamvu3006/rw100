@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "reactstrap";
-import AccountContainer from "../Container/AccountContainer";
+import AccountContainer from "../Redux/Container/AccountContainer";
 
 function AcountPage(props) {
   return (
