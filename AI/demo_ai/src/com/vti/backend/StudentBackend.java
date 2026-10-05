@@ -1,6 +1,7 @@
 package com.vti.backend;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.vti.entity.Student;
@@ -8,11 +9,18 @@ import com.vti.entity.Student;
 public class StudentBackend {
 	private static final String DEFAULT_USERNAME = "admin";
 	private static final String DEFAULT_PASSWORD = "123456";
+	private static final String USER_USERNAME = "user";
+	private static final String USER_PASSWORD = "123456";
 
 	private final ArrayList<Student> students = new ArrayList<>();
 
 	public boolean login(String username, String password) {
-		return DEFAULT_USERNAME.equals(username) && DEFAULT_PASSWORD.equals(password);
+		return (DEFAULT_USERNAME.equals(username) && DEFAULT_PASSWORD.equals(password))
+				|| (USER_USERNAME.equals(username) && USER_PASSWORD.equals(password));
+	}
+
+	public boolean isAdmin(String username) {
+		return DEFAULT_USERNAME.equals(username);
 	}
 
 	public void addStudent(Student student) {
@@ -45,9 +53,14 @@ public class StudentBackend {
 	}
 
 	public void getAllStudent(String id) {
-		for (Student student : students) {
-			System.out.println(student);
+		printStudentTable(students);
+	}
+
+	public void printStudent(Student student) {
+		if (student == null) {
+			return;
 		}
+		printStudentTable(Collections.singletonList(student));
 	}
 
 	public Student findStudentById(String id) {
@@ -82,5 +95,22 @@ public class StudentBackend {
 		} catch (NumberFormatException exception) {
 			return null;
 		}
+	}
+
+	private void printStudentTable(List<Student> studentList) {
+		if (studentList.isEmpty()) {
+			System.out.println("(Danh sach sinh vien dang trong.)");
+			return;
+		}
+
+		String border = "+--------+----------------------+-------+--------+";
+		System.out.println(border);
+		System.out.printf("| %-6s | %-20s | %-5s | %-6s |%n", "ID", "TEN", "TUOI", "DIEM");
+		System.out.println(border);
+		for (Student student : studentList) {
+			System.out.printf("| %-6d | %-20s | %-5d | %-6.2f |%n",
+					student.getId(), student.getName(), student.getAge(), student.getScore());
+		}
+		System.out.println(border);
 	}
 }
